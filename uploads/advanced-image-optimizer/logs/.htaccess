@@ -1,0 +1,6 @@
+# Advanced Image Optimizer Logs Security
+Options -Indexes
+<Files *.log>
+Order allow,deny
+Deny from all
+</Files>

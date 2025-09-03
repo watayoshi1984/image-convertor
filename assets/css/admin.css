@@ -1,0 +1,917 @@
+/**
+ * Advanced Image Optimizer - Admin Styles
+ *
+ * @package AdvancedImageOptimizer
+ * @since 1.0.0
+ */
+
+/* ==========================================================================
+   General Admin Styles
+   ========================================================================== */
+
+.aio-admin-page {
+    max-width: 1200px;
+    margin: 0;
+}
+
+.aio-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.aio-card-header {
+    background: #f9f9f9;
+    border-bottom: 1px solid #eee;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.aio-card-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #23282d;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.aio-card-header .dashicons {
+    color: #666;
+    font-size: 18px;
+}
+
+.aio-card-content {
+    padding: 20px;
+}
+
+.aio-section {
+    margin-bottom: 30px;
+}
+
+/* ==========================================================================
+   Status Indicators
+   ========================================================================== */
+
+.aio-status-good {
+    color: #46b450;
+}
+
+.aio-status-warning {
+    color: #ffb900;
+}
+
+.aio-status-error {
+    color: #dc3232;
+}
+
+.aio-status-info {
+    color: #00a0d2;
+}
+
+.aio-warning-text {
+    color: #ffb900;
+    font-size: 12px;
+}
+
+.aio-error-text {
+    color: #dc3232;
+    font-size: 12px;
+}
+
+/* ==========================================================================
+   Statistics Grid
+   ========================================================================== */
+
+.aio-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.aio-stat-item {
+    background: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.aio-stat-item:hover {
+    background: #f1f1f1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.aio-stat-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #23282d;
+    margin-bottom: 5px;
+}
+
+.aio-stat-label {
+    font-size: 14px;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.aio-stat-error .aio-stat-value {
+    color: #dc3232;
+}
+
+.aio-stat-warning .aio-stat-value {
+    color: #ffb900;
+}
+
+.aio-stat-success .aio-stat-value {
+    color: #46b450;
+}
+
+/* ==========================================================================
+   Progress Bars
+   ========================================================================== */
+
+.aio-progress-container {
+    margin: 20px 0;
+}
+
+.aio-progress-bar {
+    background: #f0f0f1;
+    border-radius: 10px;
+    height: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.aio-progress-fill {
+    background: linear-gradient(90deg, #00a0d2, #0073aa);
+    height: 100%;
+    transition: width 0.3s ease;
+    border-radius: 10px;
+}
+
+.aio-progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.aio-progress-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+}
+
+/* ==========================================================================
+   Bulk Optimization
+   ========================================================================== */
+
+.aio-bulk-optimization {
+    display: none;
+}
+
+.aio-bulk-optimization.active {
+    display: block;
+}
+
+.aio-bulk-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.aio-bulk-status {
+    padding: 15px;
+    background: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.aio-bulk-log {
+    background: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    padding: 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    font-family: monospace;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.aio-bulk-log-entry {
+    margin-bottom: 5px;
+    padding: 2px 0;
+}
+
+.aio-bulk-log-entry.success {
+    color: #46b450;
+}
+
+.aio-bulk-log-entry.error {
+    color: #dc3232;
+}
+
+.aio-bulk-log-entry.warning {
+    color: #ffb900;
+}
+
+/* ==========================================================================
+   System Information
+   ========================================================================== */
+
+.aio-system-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.aio-system-table td {
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f1;
+    vertical-align: top;
+}
+
+.aio-system-table td:first-child {
+    width: 200px;
+    font-weight: 600;
+}
+
+.aio-system-label {
+    color: #23282d;
+}
+
+.aio-system-value {
+    color: #666;
+}
+
+.aio-system-value code {
+    background: #f1f1f1;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+/* ==========================================================================
+   Capabilities Grid
+   ========================================================================== */
+
+.aio-capabilities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.aio-capability-item {
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    padding: 15px;
+    background: #fafafa;
+}
+
+.aio-capability-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.aio-capability-header h4 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.aio-capability-status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.aio-capability-details {
+    font-size: 12px;
+}
+
+.aio-capability-detail {
+    margin-bottom: 8px;
+}
+
+.aio-capability-detail:last-child {
+    margin-bottom: 0;
+}
+
+.aio-test-result {
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   Settings Forms
+   ========================================================================== */
+
+.aio-settings-section {
+    margin-bottom: 30px;
+}
+
+.aio-settings-section h3 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: #23282d;
+}
+
+.aio-form-table {
+    width: 100%;
+}
+
+.aio-form-table th {
+    width: 200px;
+    padding: 15px 10px 15px 0;
+    vertical-align: top;
+    text-align: left;
+    font-weight: 600;
+}
+
+.aio-form-table td {
+    padding: 15px 0;
+    vertical-align: top;
+}
+
+.aio-form-table .description {
+    margin-top: 5px;
+    font-size: 13px;
+    color: #666;
+    font-style: italic;
+}
+
+.aio-quality-slider {
+    width: 200px;
+    margin-right: 10px;
+}
+
+.aio-quality-value {
+    display: inline-block;
+    min-width: 30px;
+    font-weight: bold;
+    color: #23282d;
+}
+
+.aio-pro-feature {
+    opacity: 0.6;
+    position: relative;
+}
+
+.aio-pro-feature::after {
+    content: "Pro";
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #ff6900;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: bold;
+}
+
+/* ==========================================================================
+   Log Viewer
+   ========================================================================== */
+
+.aio-logs-controls {
+    margin-bottom: 20px;
+}
+
+.aio-log-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.aio-log-filters {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    align-items: end;
+}
+
+.aio-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.aio-filter-group label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #23282d;
+}
+
+.aio-log-filter {
+    padding: 6px 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.aio-log-table-wrapper {
+    overflow-x: auto;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+}
+
+.aio-log-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.aio-log-table th {
+    background: #f9f9f9;
+    padding: 12px 8px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #e5e5e5;
+    white-space: nowrap;
+}
+
+.aio-log-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid #f0f0f1;
+    vertical-align: top;
+}
+
+.aio-log-entry:hover {
+    background: #f9f9f9;
+}
+
+.aio-log-timestamp {
+    width: 120px;
+    white-space: nowrap;
+}
+
+.aio-log-level {
+    width: 80px;
+}
+
+.aio-log-context {
+    width: 100px;
+}
+
+.aio-log-message {
+    min-width: 300px;
+}
+
+.aio-log-actions {
+    width: 80px;
+    text-align: center;
+}
+
+.aio-log-level-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.aio-level-emergency,
+.aio-level-alert,
+.aio-level-critical,
+.aio-level-error {
+    background: #dc3232;
+    color: white;
+}
+
+.aio-level-warning {
+    background: #ffb900;
+    color: white;
+}
+
+.aio-level-notice,
+.aio-level-info {
+    background: #00a0d2;
+    color: white;
+}
+
+.aio-level-debug {
+    background: #666;
+    color: white;
+}
+
+.aio-log-context-badge {
+    display: inline-block;
+    padding: 2px 6px;
+    background: #f0f0f1;
+    border-radius: 3px;
+    font-size: 11px;
+    color: #666;
+}
+
+.aio-log-message-text {
+    word-break: break-word;
+}
+
+.aio-log-extra-data {
+    margin-top: 10px;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 3px;
+    font-size: 11px;
+}
+
+.aio-log-extra-data pre {
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.aio-log-pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.aio-pagination-controls {
+    display: flex;
+    gap: 5px;
+}
+
+.aio-no-logs {
+    text-align: center;
+    padding: 40px 20px;
+    color: #666;
+}
+
+.aio-no-logs-icon {
+    font-size: 48px;
+    color: #ddd;
+    margin-bottom: 15px;
+}
+
+.aio-log-auto-refresh {
+    font-size: 12px;
+    color: #666;
+}
+
+/* ==========================================================================
+   Export/Import
+   ========================================================================== */
+
+.aio-export-actions {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.aio-system-info-textarea {
+    width: 100%;
+    height: 200px;
+    font-family: monospace;
+    font-size: 12px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    padding: 10px;
+    resize: vertical;
+}
+
+/* ==========================================================================
+   Quick Actions
+   ========================================================================== */
+
+.aio-quick-actions {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    margin-bottom: 30px;
+}
+
+.aio-quick-action {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    background: #f9f9f9;
+    border: 1px solid #e5e5e5;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #23282d;
+    transition: all 0.3s ease;
+}
+
+.aio-quick-action:hover {
+    background: #f1f1f1;
+    border-color: #0073aa;
+    color: #0073aa;
+    text-decoration: none;
+}
+
+.aio-quick-action .dashicons {
+    font-size: 24px;
+    margin-right: 15px;
+    color: #666;
+}
+
+.aio-quick-action:hover .dashicons {
+    color: #0073aa;
+}
+
+.aio-quick-action-content h4 {
+    margin: 0 0 5px 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.aio-quick-action-content p {
+    margin: 0;
+    font-size: 12px;
+    color: #666;
+}
+
+/* ==========================================================================
+   Recent Activity
+   ========================================================================== */
+
+.aio-recent-activity {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.aio-activity-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f1;
+}
+
+.aio-activity-item:last-child {
+    border-bottom: none;
+}
+
+.aio-activity-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    font-size: 14px;
+}
+
+.aio-activity-icon.success {
+    background: #46b450;
+    color: white;
+}
+
+.aio-activity-icon.error {
+    background: #dc3232;
+    color: white;
+}
+
+.aio-activity-icon.warning {
+    background: #ffb900;
+    color: white;
+}
+
+.aio-activity-content {
+    flex: 1;
+}
+
+.aio-activity-message {
+    font-size: 13px;
+    color: #23282d;
+    margin-bottom: 2px;
+}
+
+.aio-activity-time {
+    font-size: 11px;
+    color: #666;
+}
+
+/* ==========================================================================
+   Pro Features Promotion
+   ========================================================================== */
+
+.aio-pro-promotion {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.aio-pro-promotion h3 {
+    margin-top: 0;
+    color: white;
+}
+
+.aio-pro-promotion p {
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.aio-pro-promotion .button {
+    background: white;
+    color: #667eea;
+    border: none;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.3s ease;
+}
+
+.aio-pro-promotion .button:hover {
+    background: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.aio-spin {
+    animation: spin 1s linear infinite;
+}
+
+.aio-fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    .aio-stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .aio-capabilities-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .aio-quick-actions {
+        grid-template-columns: 1fr;
+    }
+    
+    .aio-log-filters {
+        grid-template-columns: 1fr;
+    }
+    
+    .aio-bulk-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .aio-card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .aio-log-actions {
+        flex-direction: column;
+    }
+    
+    .aio-export-actions {
+        flex-direction: column;
+    }
+    
+    .aio-pagination-controls {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .aio-card-content {
+        padding: 15px;
+    }
+    
+    .aio-card-header {
+        padding: 12px 15px;
+    }
+    
+    .aio-form-table th {
+        width: auto;
+        display: block;
+        padding-bottom: 5px;
+    }
+    
+    .aio-form-table td {
+        display: block;
+        padding-top: 5px;
+        padding-bottom: 15px;
+    }
+    
+    .aio-system-table td:first-child {
+        width: auto;
+        display: block;
+        padding-bottom: 5px;
+        font-weight: 600;
+    }
+    
+    .aio-system-table td:last-child {
+        display: block;
+        padding-top: 0;
+    }
+}
+
+/* ==========================================================================
+   Dark Mode Support
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+    .aio-card {
+        background: #1e1e1e;
+        border-color: #3c3c3c;
+        color: #e0e0e0;
+    }
+    
+    .aio-card-header {
+        background: #2a2a2a;
+        border-color: #3c3c3c;
+    }
+    
+    .aio-card-header h3 {
+        color: #e0e0e0;
+    }
+    
+    .aio-stat-item {
+        background: #2a2a2a;
+        border-color: #3c3c3c;
+        color: #e0e0e0;
+    }
+    
+    .aio-stat-value {
+        color: #e0e0e0;
+    }
+    
+    .aio-system-value {
+        color: #b0b0b0;
+    }
+    
+    .aio-log-table th {
+        background: #2a2a2a;
+        color: #e0e0e0;
+    }
+    
+    .aio-log-entry:hover {
+        background: #2a2a2a;
+    }
+}
+
+/* ==========================================================================
+   Print Styles
+   ========================================================================== */
+
+@media print {
+    .aio-card {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+    
+    .aio-log-actions,
+    .aio-bulk-controls,
+    .aio-export-actions {
+        display: none;
+    }
+    
+    .aio-pro-promotion {
+        display: none;
+    }
+}
