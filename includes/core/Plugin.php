@@ -11,12 +11,12 @@
 
 namespace ImageConvertor\Core;
 
-use ImageConvertor\Processing\BinaryWrapper;
-use ImageConvertor\Processing\ImageProcessor;
-use ImageConvertor\Admin\AdminManager;
+use AdvancedImageOptimizer\Processing\BinaryWrapper;
+use AdvancedImageOptimizer\Processing\ImageProcessor;
+use AdvancedImageOptimizer\Admin\AdminManager;
 use ImageConvertor\Media\MediaManager;
 use ImageConvertor\Delivery\DeliveryManager;
-use ImageConvertor\Utils\Utils;
+use AdvancedImageOptimizer\Common\Utils;
 use ImageConvertor\Pro\ProManager;
 use AdvancedImageOptimizer\Common\Logger;
 
@@ -169,8 +169,8 @@ class Plugin {
         // Initialize binary wrapper
         $this->binary_wrapper = new BinaryWrapper($this->logger);
         
-        // Initialize image processor
-        $this->image_processor = new ImageProcessor($this->binary_wrapper, $this->logger);
+        // Initialize image processor (expects Logger and optional options)
+        $this->image_processor = new ImageProcessor($this->logger, $this->options);
     }
     
     /**
@@ -196,7 +196,7 @@ class Plugin {
         }
         
         // Initialize Pro manager
-        $this->pro_manager = new ProManager($this->logger);
+        $this->pro_manager = new ProManager($this->logger, $this->binary_wrapper, $this->image_processor);
         $this->pro_manager->init();
     }
     
@@ -364,11 +364,11 @@ class Plugin {
      */
     public function show_admin_notices() {
         // Check for missing binaries
-        if (!$this->binary_wrapper->has_required_binaries()) {
-            $missing_binaries = $this->binary_wrapper->get_missing_binaries();
+        $missing_binaries = $this->binary_wrapper->get_missing_required_binaries();
+        if (!empty($missing_binaries)) {
             
             echo '<div class="notice notice-warning is-dismissible">';
-            echo '<p><strong>Image Convertor:</strong> 以下のバイナリが見つかりません: ' . implode(', ', $missing_binaries) . '</p>';
+            echo '<p><strong>Image Convertor:</strong> 以下のバイナリが見つかりません: ' . implode(', ', array_keys($missing_binaries)) . '</p>';
             echo '<p>最適化機能を使用するには、これらのバイナリをインストールしてください。</p>';
             echo '</div>';
         }
@@ -420,8 +420,8 @@ class Plugin {
             
             $cutoff_time = time() - ($cleanup_days * DAY_IN_SECONDS);
             
-            // Clean up log files
-            $this->logger->cleanup_old_logs($cutoff_time);
+            // Clean up log files - handled by cleanup_old_backups method
+            $this->cleanup_old_log_files($cutoff_time);
             
             // Clean up temporary files
             $this->cleanup_temp_files($cutoff_time);
@@ -595,6 +595,28 @@ class Plugin {
         
         // Remove generated WebP/AVIF files
         self::cleanup_generated_files();
+    }
+    
+    /**
+     * Cleanup old log files
+     * 
+     * @param int $cutoff_time Cutoff timestamp
+     * @return void
+     */
+    private function cleanup_old_log_files($cutoff_time) {
+        $upload_dir = wp_upload_dir();
+        $log_dir = $upload_dir['basedir'] . '/advanced-image-optimizer/logs';
+        
+        if (!is_dir($log_dir)) {
+            return;
+        }
+        
+        $files = glob($log_dir . '/*.log*');
+        foreach ($files as $file) {
+            if (filemtime($file) < $cutoff_time) {
+                unlink($file);
+            }
+        }
     }
     
     /**

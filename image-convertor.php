@@ -5,7 +5,7 @@
  * Description: 高性能な画像最適化プラグイン。WebP/AVIF変換、一括最適化、フロントエンド配信機能を提供します。
  * Version: 1.0.0
  * Author: Watayoshi1984
- * Author URI: hhttps://github.com/watayoshi1984/
+ * Author URI: https://github.com/watayoshi1984/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: image-convertor

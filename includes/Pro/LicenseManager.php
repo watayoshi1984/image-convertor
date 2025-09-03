@@ -11,8 +11,8 @@
 
 namespace ImageConvertor\Pro;
 
-use ImageConvertor\Core\Logger;
-use ImageConvertor\Utils\Utils;
+use AdvancedImageOptimizer\Common\Logger;
+use AdvancedImageOptimizer\Common\Utils;
 
 class LicenseManager {
     

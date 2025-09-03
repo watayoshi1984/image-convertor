@@ -11,9 +11,9 @@
 
 namespace ImageConvertor\Pro;
 
-use ImageConvertor\Core\Logger;
-use ImageConvertor\Processing\BinaryWrapper;
-use ImageConvertor\Utils\Utils;
+use AdvancedImageOptimizer\Common\Logger;
+use AdvancedImageOptimizer\Processing\BinaryWrapper;
+use AdvancedImageOptimizer\Common\Utils;
 
 class AvifProcessor {
     

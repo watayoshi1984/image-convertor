@@ -11,9 +11,9 @@
 
 namespace ImageConvertor\Media;
 
-use ImageConvertor\Processing\ImageProcessor;
-use ImageConvertor\Core\Logger;
-use ImageConvertor\Utils\Utils;
+use AdvancedImageOptimizer\Processing\ImageProcessor;
+use AdvancedImageOptimizer\Common\Logger;
+use AdvancedImageOptimizer\Common\Utils;
 
 class MediaManager {
     

@@ -11,9 +11,9 @@
 
 namespace ImageConvertor\Pro;
 
-use ImageConvertor\Core\Logger;
-use ImageConvertor\Processing\BinaryWrapper;
-use ImageConvertor\Processing\ImageProcessor;
+use AdvancedImageOptimizer\Common\Logger;
+use AdvancedImageOptimizer\Processing\BinaryWrapper;
+use AdvancedImageOptimizer\Processing\ImageProcessor;
 
 class ProManager {
     

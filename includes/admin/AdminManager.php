@@ -397,14 +397,14 @@ class AdminManager {
         $system_info = Utils::get_system_info();
         $capabilities = $this->image_processor->test_capabilities();
         
-        include ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR . 'includes/Admin/views/main-page.php';
+        include ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR . 'includes/admin/views/main-page.php';
     }
 
     /**
      * Render settings page
      */
     public function render_settings_page() {
-        include ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR . 'includes/Admin/views/settings-page.php';
+        include ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR . 'includes/admin/views/settings-page.php';
     }
 
     /**
@@ -412,7 +412,7 @@ class AdminManager {
      */
     public function render_stats_page() {
         $stats = Utils::get_optimization_stats();
-        include ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR . 'includes/Admin/views/stats-page.php';
+        include ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR . 'includes/admin/views/stats-page.php';
     }
 
     /**
@@ -421,7 +421,7 @@ class AdminManager {
     public function render_system_page() {
         $system_info = Utils::get_system_info();
         $capabilities = $this->image_processor->test_capabilities();
-        include ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR . 'includes/Admin/views/system-page.php';
+        include ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR . 'includes/admin/views/system-page.php';
     }
 
     /**
@@ -434,7 +434,7 @@ class AdminManager {
         $log_contents = $logger->get_log_contents(100); // Last 100 lines
         $log_stats = $logger->get_log_stats();
         
-        include ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR . 'includes/Admin/views/logs-page.php';
+        include ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR . 'includes/admin/views/logs-page.php';
     }
 
     /**
