@@ -58,15 +58,15 @@ if (file_exists(IMAGE_CONVERTOR_PLUGIN_DIR . 'vendor/autoload.php')) {
 // Load plugin classes
 require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/common/Logger.php';
 require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/common/Utils.php';
-require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Processing/BinaryWrapper.php';
-require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Processing/ImageProcessor.php';
-require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Admin/AdminManager.php';
-require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Media/MediaManager.php';
-require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Delivery/DeliveryManager.php';
-require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Pro/LicenseManager.php';
-require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Pro/AvifProcessor.php';
-require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Pro/ProManager.php';
-require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Core/Plugin.php';
+require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/processing/BinaryWrapper.php';
+require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/processing/ImageProcessor.php';
+require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/admin/AdminManager.php';
+require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/media/MediaManager.php';
+require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/delivery/DeliveryManager.php';
+require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/pro/LicenseManager.php';
+require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/pro/AvifProcessor.php';
+require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/pro/ProManager.php';
+require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/core/Plugin.php';
 
 // Initialize plugin
 function image_convertor_init() {
