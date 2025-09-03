@@ -56,8 +56,8 @@ if (file_exists(IMAGE_CONVERTOR_PLUGIN_DIR . 'vendor/autoload.php')) {
 }
 
 // Load plugin classes
-require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Utils/Logger.php';
-require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Utils/Utils.php';
+require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/common/Logger.php';
+require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/common/Utils.php';
 require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Processing/BinaryWrapper.php';
 require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Processing/ImageProcessor.php';
 require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Admin/AdminManager.php';
