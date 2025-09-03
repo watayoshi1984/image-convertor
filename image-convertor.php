@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: Image Convertor
- * Plugin URI: https://example.com/image-convertor
+ * Plugin URI: https://github.com/watayoshi1984/image-convertor.git
  * Description: 高性能な画像最適化プラグイン。WebP/AVIF変換、一括最適化、フロントエンド配信機能を提供します。
  * Version: 1.0.0
- * Author: Your Name
- * Author URI: https://example.com
+ * Author: Watayoshi1984
+ * Author URI: hhttps://github.com/watayoshi1984/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: image-convertor
@@ -61,11 +61,11 @@ require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/common/Utils.php';
 require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/processing/BinaryWrapper.php';
 require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/processing/ImageProcessor.php';
 require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/admin/AdminManager.php';
-require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/media/MediaManager.php';
+require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Media/MediaManager.php';
 require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/delivery/DeliveryManager.php';
-require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/pro/LicenseManager.php';
-require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/pro/AvifProcessor.php';
-require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/pro/ProManager.php';
+require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Pro/LicenseManager.php';
+require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Pro/AvifProcessor.php';
+require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Pro/ProManager.php';
 require_once IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/core/Plugin.php';
 
 // Initialize plugin
