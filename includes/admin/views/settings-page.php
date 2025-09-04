@@ -20,34 +20,34 @@ if (!defined('ABSPATH')) {
     <div class="aio-settings-page">
         <form method="post" action="options.php">
             <?php
-            settings_fields('advanced_image_optimizer_options');
-            do_settings_sections('advanced-image-optimizer-settings');
+            settings_fields('wyoshi_img_opt_options');
+            do_settings_sections('wyoshi-img-opt-settings');
             ?>
             
             <div class="aio-settings-sections">
                 <!-- General Settings -->
                 <div class="aio-settings-section">
                     <div class="aio-section-header">
-                        <h2><?php _e('General Settings', 'advanced-image-optimizer'); ?></h2>
-                        <p class="description"><?php _e('Configure basic optimization behavior.', 'advanced-image-optimizer'); ?></p>
+                        <h2><?php _e('General Settings', 'wyoshi-image-optimizer'); ?></h2>
+                        <p class="description"><?php _e('Configure basic optimization behavior.', 'wyoshi-image-optimizer'); ?></p>
                     </div>
                     
                     <table class="form-table" role="presentation">
                         <tbody>
                             <tr>
                                 <th scope="row">
-                                    <label for="auto_optimize"><?php _e('Auto Optimize', 'advanced-image-optimizer'); ?></label>
+                                    <label for="auto_optimize"><?php _e('Auto Optimize', 'wyoshi-image-optimizer'); ?></label>
                                 </th>
                                 <td>
                                     <?php
-                                    $options = get_option('advanced_image_optimizer_options', []);
+                                    $options = get_option('wyoshi_img_opt_options', []);
                                     $auto_optimize = isset($options['auto_optimize']) ? $options['auto_optimize'] : false;
                                     ?>
                                     <label>
-                                        <input type="checkbox" name="advanced_image_optimizer_options[auto_optimize]" id="auto_optimize" value="1" <?php checked(1, $auto_optimize); ?> />
-                                        <?php _e('Automatically optimize images when uploaded', 'advanced-image-optimizer'); ?>
+                                        <input type="checkbox" name="wyoshi_img_opt_options[auto_optimize]" id="auto_optimize" value="1" <?php checked(1, $auto_optimize); ?> />
+                                        <?php _e('Automatically optimize images when uploaded', 'wyoshi-image-optimizer'); ?>
                                     </label>
-                                    <p class="description"><?php _e('When enabled, images will be automatically optimized upon upload to the media library.', 'advanced-image-optimizer'); ?></p>
+                                    <p class="description"><?php _e('When enabled, images will be automatically optimized upon upload to the media library.', 'wyoshi-image-optimizer'); ?></p>
                                 </td>
                             </tr>
                             
@@ -58,7 +58,7 @@ if (!defined('ABSPATH')) {
                                 <td>
                                     <?php $generate_webp = isset($options['generate_webp']) ? $options['generate_webp'] : false; ?>
                                     <label>
-                                        <input type="checkbox" name="advanced_image_optimizer_options[generate_webp]" id="generate_webp" value="1" <?php checked(1, $generate_webp); ?> />
+                                        <input type="checkbox" name="wyoshi_img_opt_options[generate_webp]" id="generate_webp" value="1" <?php checked(1, $generate_webp); ?> />
                                         <?php _e('Generate WebP versions of images', 'advanced-image-optimizer'); ?>
                                     </label>
                                     <p class="description"><?php _e('WebP format provides better compression than JPEG and PNG while maintaining quality.', 'advanced-image-optimizer'); ?></p>
@@ -72,15 +72,15 @@ if (!defined('ABSPATH')) {
                                 <td>
                                     <?php $generate_avif = isset($options['generate_avif']) ? $options['generate_avif'] : false; ?>
                                     <label>
-                                        <input type="checkbox" name="advanced_image_optimizer_options[generate_avif]" id="generate_avif" value="1" <?php checked(1, $generate_avif); ?> <?php if (!defined('ADVANCED_IMAGE_OPTIMIZER_PRO_VERSION')) echo 'disabled'; ?> />
+                                        <input type="checkbox" name="wyoshi_img_opt_options[generate_avif]" id="generate_avif" value="1" <?php checked(1, $generate_avif); ?> <?php if (!defined('WYOSHI_IMG_OPT_PRO_VERSION')) echo 'disabled'; ?> />
                                         <?php _e('Generate AVIF versions of images', 'advanced-image-optimizer'); ?>
-                                        <?php if (!defined('ADVANCED_IMAGE_OPTIMIZER_PRO_VERSION')): ?>
+                                        <?php if (!defined('WYOSHI_IMG_OPT_PRO_VERSION')): ?>
                                             <span class="aio-pro-badge"><?php _e('Pro', 'advanced-image-optimizer'); ?></span>
                                         <?php endif; ?>
                                     </label>
                                     <p class="description">
                                         <?php _e('AVIF format provides even better compression than WebP.', 'advanced-image-optimizer'); ?>
-                                        <?php if (!defined('ADVANCED_IMAGE_OPTIMIZER_PRO_VERSION')): ?>
+                                        <?php if (!defined('WYOSHI_IMG_OPT_PRO_VERSION')): ?>
                                             <a href="#" class="aio-pro-link"><?php _e('Upgrade to Pro', 'advanced-image-optimizer'); ?></a>
                                         <?php endif; ?>
                                     </p>
@@ -94,7 +94,7 @@ if (!defined('ABSPATH')) {
                                 <td>
                                     <?php $backup_original = isset($options['backup_original']) ? $options['backup_original'] : true; ?>
                                     <label>
-                                        <input type="checkbox" name="advanced_image_optimizer_options[backup_original]" id="backup_original" value="1" <?php checked(1, $backup_original); ?> />
+                                        <input type="checkbox" name="wyoshi_img_opt_options[backup_original]" id="backup_original" value="1" <?php checked(1, $backup_original); ?> />
                                         <?php _e('Keep backup copies of original images', 'advanced-image-optimizer'); ?>
                                     </label>
                                     <p class="description"><?php _e('Recommended. Allows you to restore original images if needed.', 'advanced-image-optimizer'); ?></p>
@@ -119,7 +119,7 @@ if (!defined('ABSPATH')) {
                                 </th>
                                 <td>
                                     <?php $webp_quality = isset($options['webp_quality']) ? $options['webp_quality'] : 80; ?>
-                                    <input type="number" name="advanced_image_optimizer_options[webp_quality]" id="webp_quality" value="<?php echo esc_attr($webp_quality); ?>" min="1" max="100" class="small-text" />
+                                    <input type="number" name="wyoshi_img_opt_options[webp_quality]" id="webp_quality" value="<?php echo esc_attr($webp_quality); ?>" min="1" max="100" class="small-text" />
                                     <span class="aio-quality-slider-container">
                                         <input type="range" class="aio-quality-slider" data-target="webp_quality" min="1" max="100" value="<?php echo esc_attr($webp_quality); ?>" />
                                     </span>
@@ -133,11 +133,11 @@ if (!defined('ABSPATH')) {
                                 </th>
                                 <td>
                                     <?php $avif_quality = isset($options['avif_quality']) ? $options['avif_quality'] : 70; ?>
-                                    <input type="number" name="advanced_image_optimizer_options[avif_quality]" id="avif_quality" value="<?php echo esc_attr($avif_quality); ?>" min="1" max="100" class="small-text" <?php if (!defined('ADVANCED_IMAGE_OPTIMIZER_PRO_VERSION')) echo 'disabled'; ?> />
+                                    <input type="number" name="wyoshi_img_opt_options[avif_quality]" id="avif_quality" value="<?php echo esc_attr($avif_quality); ?>" min="1" max="100" class="small-text" <?php if (!defined('WYOSHI_IMG_OPT_PRO_VERSION')) echo 'disabled'; ?> />
                                     <span class="aio-quality-slider-container">
-                                        <input type="range" class="aio-quality-slider" data-target="avif_quality" min="1" max="100" value="<?php echo esc_attr($avif_quality); ?>" <?php if (!defined('ADVANCED_IMAGE_OPTIMIZER_PRO_VERSION')) echo 'disabled'; ?> />
+                                        <input type="range" class="aio-quality-slider" data-target="avif_quality" min="1" max="100" value="<?php echo esc_attr($avif_quality); ?>" <?php if (!defined('WYOSHI_IMG_OPT_PRO_VERSION')) echo 'disabled'; ?> />
                                     </span>
-                                    <?php if (!defined('ADVANCED_IMAGE_OPTIMIZER_PRO_VERSION')): ?>
+                                    <?php if (!defined('WYOSHI_IMG_OPT_PRO_VERSION')): ?>
                                         <span class="aio-pro-badge"><?php _e('Pro', 'advanced-image-optimizer'); ?></span>
                                     <?php endif; ?>
                                     <p class="description"><?php _e('AVIF can achieve similar quality at lower values. Recommended: 65-75', 'advanced-image-optimizer'); ?></p>
@@ -150,7 +150,7 @@ if (!defined('ABSPATH')) {
                                 </th>
                                 <td>
                                     <?php $jpeg_quality = isset($options['jpeg_quality']) ? $options['jpeg_quality'] : 85; ?>
-                                    <input type="number" name="advanced_image_optimizer_options[jpeg_quality]" id="jpeg_quality" value="<?php echo esc_attr($jpeg_quality); ?>" min="1" max="100" class="small-text" />
+                                    <input type="number" name="wyoshi_img_opt_options[jpeg_quality]" id="jpeg_quality" value="<?php echo esc_attr($jpeg_quality); ?>" min="1" max="100" class="small-text" />
                                     <span class="aio-quality-slider-container">
                                         <input type="range" class="aio-quality-slider" data-target="jpeg_quality" min="1" max="100" value="<?php echo esc_attr($jpeg_quality); ?>" />
                                     </span>
@@ -176,7 +176,7 @@ if (!defined('ABSPATH')) {
                                 </th>
                                 <td>
                                     <?php $max_width = isset($options['max_width']) ? $options['max_width'] : 0; ?>
-                                    <input type="number" name="advanced_image_optimizer_options[max_width]" id="max_width" value="<?php echo esc_attr($max_width); ?>" min="0" max="10000" class="regular-text" />
+                                    <input type="number" name="wyoshi_img_opt_options[max_width]" id="max_width" value="<?php echo esc_attr($max_width); ?>" min="0" max="10000" class="regular-text" />
                                     <p class="description"><?php _e('Maximum width in pixels. Images wider than this will be resized. Set to 0 for no limit.', 'advanced-image-optimizer'); ?></p>
                                 </td>
                             </tr>
@@ -187,7 +187,7 @@ if (!defined('ABSPATH')) {
                                 </th>
                                 <td>
                                     <?php $max_height = isset($options['max_height']) ? $options['max_height'] : 0; ?>
-                                    <input type="number" name="advanced_image_optimizer_options[max_height]" id="max_height" value="<?php echo esc_attr($max_height); ?>" min="0" max="10000" class="regular-text" />
+                                    <input type="number" name="wyoshi_img_opt_options[max_height]" id="max_height" value="<?php echo esc_attr($max_height); ?>" min="0" max="10000" class="regular-text" />
                                     <p class="description"><?php _e('Maximum height in pixels. Images taller than this will be resized. Set to 0 for no limit.', 'advanced-image-optimizer'); ?></p>
                                 </td>
                             </tr>
@@ -199,7 +199,7 @@ if (!defined('ABSPATH')) {
                                 <td>
                                     <?php $enable_logging = isset($options['enable_logging']) ? $options['enable_logging'] : false; ?>
                                     <label>
-                                        <input type="checkbox" name="advanced_image_optimizer_options[enable_logging]" id="enable_logging" value="1" <?php checked(1, $enable_logging); ?> />
+                                        <input type="checkbox" name="wyoshi_img_opt_options[enable_logging]" id="enable_logging" value="1" <?php checked(1, $enable_logging); ?> />
                                         <?php _e('Enable detailed logging for debugging', 'advanced-image-optimizer'); ?>
                                     </label>
                                     <p class="description"><?php _e('Logs optimization activities and errors. Useful for troubleshooting but may impact performance.', 'advanced-image-optimizer'); ?></p>
@@ -212,7 +212,7 @@ if (!defined('ABSPATH')) {
                                 </th>
                                 <td>
                                     <?php $cleanup_interval = isset($options['cleanup_interval']) ? $options['cleanup_interval'] : 30; ?>
-                                    <select name="advanced_image_optimizer_options[cleanup_interval]" id="cleanup_interval">
+                                    <select name="wyoshi_img_opt_options[cleanup_interval]" id="cleanup_interval">
                                         <option value="7" <?php selected(7, $cleanup_interval); ?>><?php _e('7 days', 'advanced-image-optimizer'); ?></option>
                                         <option value="14" <?php selected(14, $cleanup_interval); ?>><?php _e('14 days', 'advanced-image-optimizer'); ?></option>
                                         <option value="30" <?php selected(30, $cleanup_interval); ?>><?php _e('30 days', 'advanced-image-optimizer'); ?></option>
@@ -242,7 +242,7 @@ if (!defined('ABSPATH')) {
                                 </th>
                                 <td>
                                     <?php $custom_binary_path = isset($options['custom_binary_path']) ? $options['custom_binary_path'] : ''; ?>
-                                    <input type="text" name="advanced_image_optimizer_options[custom_binary_path]" id="custom_binary_path" value="<?php echo esc_attr($custom_binary_path); ?>" class="regular-text" />
+                                    <input type="text" name="wyoshi_img_opt_options[custom_binary_path]" id="custom_binary_path" value="<?php echo esc_attr($custom_binary_path); ?>" class="regular-text" />
                                     <p class="description"><?php _e('Custom path to optimization binaries. Leave empty to use bundled binaries.', 'advanced-image-optimizer'); ?></p>
                                 </td>
                             </tr>
@@ -253,7 +253,7 @@ if (!defined('ABSPATH')) {
                                 </th>
                                 <td>
                                     <?php $timeout = isset($options['timeout']) ? $options['timeout'] : 30; ?>
-                                    <input type="number" name="advanced_image_optimizer_options[timeout]" id="timeout" value="<?php echo esc_attr($timeout); ?>" min="5" max="300" class="small-text" />
+                                    <input type="number" name="wyoshi_img_opt_options[timeout]" id="timeout" value="<?php echo esc_attr($timeout); ?>" min="5" max="300" class="small-text" />
                                     <span><?php _e('seconds', 'advanced-image-optimizer'); ?></span>
                                     <p class="description"><?php _e('Maximum time to wait for optimization processes to complete.', 'advanced-image-optimizer'); ?></p>
                                 </td>

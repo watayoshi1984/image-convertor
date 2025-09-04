@@ -2,7 +2,7 @@
 /**
  * AVIF Settings Tab Template
  * 
- * @package ImageConvertor
+ * @package WyoshiImageOptimizer
  * @subpackage Admin\Views
  * @since 1.0.0
  */
@@ -12,10 +12,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-$plugin = \ImageConvertor\Core\Plugin::get_instance();
+$plugin = \WyoshiImageOptimizer\Plugin::get_instance();
 $pro_manager = $plugin->get_pro_manager();
 $avif_processor = $pro_manager->get_avif_processor();
-$options = get_option('image_convertor_options', []);
+$options = get_option('wyoshi_img_opt_options', []);
 $is_available = $avif_processor->is_available();
 $browser_support = $avif_processor->browser_supports_avif();
 $stats = $avif_processor->get_conversion_stats();
@@ -79,7 +79,7 @@ $stats = $avif_processor->get_conversion_stats();
     
     <?php if ($is_available): ?>
         <form method="post" action="options.php" id="avif-settings-form">
-            <?php settings_fields('image_convertor_options'); ?>
+            <?php settings_fields('wyoshi_img_opt_options'); ?>
             
             <div class="settings-section">
                 <h3>AVIF生成設定</h3>
@@ -90,7 +90,7 @@ $stats = $avif_processor->get_conversion_stats();
                         </th>
                         <td>
                             <label class="switch">
-                                <input type="checkbox" id="generate_avif" name="image_convertor_options[generate_avif]" value="1" <?php checked(!empty($options['generate_avif'])); ?>>
+                                <input type="checkbox" id="generate_avif" name="wyoshi_img_opt_options[generate_avif]" value="1" <?php checked(!empty($options['generate_avif'])); ?>>
                                 <span class="slider"></span>
                             </label>
                             <p class="description">
@@ -111,7 +111,7 @@ $stats = $avif_processor->get_conversion_stats();
                         </th>
                         <td>
                             <div class="range-input-group">
-                                <input type="range" id="avif_quality" name="image_convertor_options[avif_quality]" min="1" max="100" step="1" value="<?php echo intval($options['avif_quality'] ?? 80); ?>" class="range-input">
+                                <input type="range" id="avif_quality" name="wyoshi_img_opt_options[avif_quality]" min="1" max="100" step="1" value="<?php echo intval($options['avif_quality'] ?? 80); ?>" class="range-input">
                                 <span class="range-value"><?php echo intval($options['avif_quality'] ?? 80); ?></span>
                             </div>
                             <p class="description">
@@ -127,7 +127,7 @@ $stats = $avif_processor->get_conversion_stats();
                         </th>
                         <td>
                             <div class="range-input-group">
-                                <input type="range" id="avif_speed" name="image_convertor_options[avif_speed]" min="0" max="10" step="1" value="<?php echo intval($options['avif_speed'] ?? 6); ?>" class="range-input">
+                                <input type="range" id="avif_speed" name="wyoshi_img_opt_options[avif_speed]" min="0" max="10" step="1" value="<?php echo intval($options['avif_speed'] ?? 6); ?>" class="range-input">
                                 <span class="range-value"><?php echo intval($options['avif_speed'] ?? 6); ?></span>
                             </div>
                             <p class="description">
@@ -143,7 +143,7 @@ $stats = $avif_processor->get_conversion_stats();
                         </th>
                         <td>
                             <div class="range-input-group">
-                                <input type="range" id="avif_effort" name="image_convertor_options[avif_effort]" min="0" max="9" step="1" value="<?php echo intval($options['avif_effort'] ?? 4); ?>" class="range-input">
+                                <input type="range" id="avif_effort" name="wyoshi_img_opt_options[avif_effort]" min="0" max="9" step="1" value="<?php echo intval($options['avif_effort'] ?? 4); ?>" class="range-input">
                                 <span class="range-value"><?php echo intval($options['avif_effort'] ?? 4); ?></span>
                             </div>
                             <p class="description">
@@ -163,7 +163,7 @@ $stats = $avif_processor->get_conversion_stats();
                             <label for="bulk_batch_size">バッチサイズ</label>
                         </th>
                         <td>
-                            <input type="number" id="bulk_batch_size" name="image_convertor_options[bulk_optimization_batch_size]" min="1" max="50" value="<?php echo intval($options['bulk_optimization_batch_size'] ?? 10); ?>" class="small-text">
+                            <input type="number" id="bulk_batch_size" name="wyoshi_img_opt_options[bulk_optimization_batch_size]" min="1" max="50" value="<?php echo intval($options['bulk_optimization_batch_size'] ?? 10); ?>" class="small-text">
                             <p class="description">
                                 一度に処理する画像の数を設定します。
                                 <br>サーバーの性能に応じて調整してください。推奨値: 5-20
@@ -275,8 +275,8 @@ jQuery(document).ready(function($) {
             url: ajaxurl,
             type: 'POST',
             data: {
-                action: 'image_convertor_test_avif_support',
-                nonce: '<?php echo wp_create_nonce('image_convertor_admin_nonce'); ?>'
+                action: 'wyoshi_img_opt_test_avif_support',
+                    nonce: '<?php echo wp_create_nonce('wyoshi_img_opt_admin_nonce'); ?>'
             },
             success: function(response) {
                 if (response.success) {
@@ -352,10 +352,10 @@ jQuery(document).ready(function($) {
             url: ajaxurl,
             type: 'POST',
             data: {
-                action: 'image_convertor_bulk_avif_conversion',
-                batch_size: batchSize,
-                offset: bulkConversionOffset,
-                nonce: '<?php echo wp_create_nonce('image_convertor_admin_nonce'); ?>'
+                action: 'wyoshi_img_opt_bulk_avif_conversion',
+                    batch_size: batchSize,
+                    offset: offset,
+                    nonce: '<?php echo wp_create_nonce('wyoshi_img_opt_admin_nonce'); ?>'
             },
             success: function(response) {
                 if (response.success) {

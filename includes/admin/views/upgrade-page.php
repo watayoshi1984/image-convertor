@@ -2,7 +2,7 @@
 /**
  * Upgrade Page Template
  * 
- * @package ImageConvertor
+ * @package WyoshiImageOptimizer
  * @subpackage Admin\Views
  * @since 1.0.0
  */
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
 $current_user = wp_get_current_user();
 ?>
 
-<div class="wrap image-convertor-upgrade-page">
+<div class="wrap wyoshi-img-opt-upgrade-page">
     <h1>Image Convertor Pro にアップグレード</h1>
     
     <div class="upgrade-hero">

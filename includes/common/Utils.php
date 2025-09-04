@@ -2,11 +2,11 @@
 /**
  * Utility Functions
  *
- * @package AdvancedImageOptimizer\Common
+ * @package WyoshiImageOptimizer\Common
  * @since 1.0.0
  */
 
-namespace AdvancedImageOptimizer\Common;
+namespace WyoshiImageOptimizer\Common;
 
 /**
  * Utility Functions Class
@@ -273,7 +273,7 @@ class Utils {
      * @return array Optimization statistics
      */
     public static function get_optimization_stats() {
-        $stats = get_option('advanced_image_optimizer_stats', [
+        $stats = get_option('wyoshi_img_opt_stats', [
             'total_images' => 0,
             'optimized_images' => 0,
             'total_savings' => 0,
@@ -296,7 +296,7 @@ class Utils {
         $updated_stats = array_merge($current_stats, $data);
         $updated_stats['last_optimization'] = current_time('mysql');
 
-        return update_option('advanced_image_optimizer_stats', $updated_stats);
+        return update_option('wyoshi_img_opt_stats', $updated_stats);
     }
 
     /**
@@ -305,7 +305,7 @@ class Utils {
      * @return bool Success status
      */
     public static function reset_optimization_stats() {
-        return delete_option('advanced_image_optimizer_stats');
+        return delete_option('wyoshi_img_opt_stats');
     }
 
     /**
@@ -335,9 +335,9 @@ class Utils {
             'operating_system' => PHP_OS,
             'upload_dir' => $upload_dir['basedir'],
             'upload_dir_writable' => is_writable($upload_dir['basedir']),
-            'plugin_version' => ADVANCED_IMAGE_OPTIMIZER_VERSION,
-            'plugin_dir' => ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR,
-            'plugin_dir_writable' => is_writable(ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR)
+            'plugin_version' => WYOSHI_IMG_OPT_VERSION,
+            'plugin_dir' => WYOSHI_IMG_OPT_PLUGIN_DIR,
+            'plugin_dir_writable' => is_writable(WYOSHI_IMG_OPT_PLUGIN_DIR)
         ];
     }
 

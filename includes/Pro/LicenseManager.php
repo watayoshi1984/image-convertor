@@ -4,15 +4,15 @@
  * 
  * Handles Pro version license validation and management
  * 
- * @package ImageConvertor
+ * @package WyoshiImageOptimizer
  * @subpackage Pro
  * @since 1.0.0
  */
 
-namespace ImageConvertor\Pro;
+namespace WyoshiImageOptimizer\Pro;
 
-use AdvancedImageOptimizer\Common\Logger;
-use AdvancedImageOptimizer\Common\Utils;
+use WyoshiImageOptimizer\Common\Logger;
+use WyoshiImageOptimizer\Common\Utils;
 
 class LicenseManager {
     
@@ -60,18 +60,16 @@ class LicenseManager {
      */
     public function init() {
         // Schedule license check
-        add_action('image_convertor_license_check', [$this, 'check_license']);
+        add_action('wyoshi_img_opt_license_check', [$this, 'check_license']);
         
-        if (!wp_next_scheduled('image_convertor_license_check')) {
-            wp_schedule_event(time(), 'daily', 'image_convertor_license_check');
+        if (!wp_next_scheduled('wyoshi_img_opt_license_check')) {
+            wp_schedule_event(time(), 'daily', 'wyoshi_img_opt_license_check');
         }
         
-        // Admin hooks
-        if (is_admin()) {
-            add_action('wp_ajax_image_convertor_activate_license', [$this, 'ajax_activate_license']);
-            add_action('wp_ajax_image_convertor_deactivate_license', [$this, 'ajax_deactivate_license']);
-            add_action('wp_ajax_image_convertor_check_license', [$this, 'ajax_check_license']);
-        }
+        // AJAX handlers
+        add_action('wp_ajax_wyoshi_img_opt_activate_license', [$this, 'ajax_activate_license']);
+        add_action('wp_ajax_wyoshi_img_opt_deactivate_license', [$this, 'ajax_deactivate_license']);
+        add_action('wp_ajax_wyoshi_img_opt_check_license', [$this, 'ajax_check_license']);
         
         // Load license data
         $this->load_license_data();
@@ -315,7 +313,7 @@ class LicenseManager {
      * @return void
      */
     public function ajax_activate_license() {
-        check_ajax_referer('image_convertor_admin_nonce', 'nonce');
+        check_ajax_referer('wyoshi_img_opt_admin_nonce', 'nonce');
         
         if (!current_user_can('manage_options')) {
             wp_send_json_error('権限が不足しています。');
@@ -337,7 +335,7 @@ class LicenseManager {
      * @return void
      */
     public function ajax_deactivate_license() {
-        check_ajax_referer('image_convertor_admin_nonce', 'nonce');
+        check_ajax_referer('wyoshi_img_opt_admin_nonce', 'nonce');
         
         if (!current_user_can('manage_options')) {
             wp_send_json_error('権限が不足しています。');
@@ -358,7 +356,7 @@ class LicenseManager {
      * @return void
      */
     public function ajax_check_license() {
-        check_ajax_referer('image_convertor_admin_nonce', 'nonce');
+        check_ajax_referer('wyoshi_img_opt_admin_nonce', 'nonce');
         
         if (!current_user_can('manage_options')) {
             wp_send_json_error('権限が不足しています。');
@@ -374,7 +372,7 @@ class LicenseManager {
      * @return void
      */
     private function load_license_data() {
-        $this->license_data = get_option('image_convertor_license_data', null);
+        $this->license_data = get_option('wyoshi_img_opt_license_data', null);
     }
     
     /**
@@ -385,7 +383,7 @@ class LicenseManager {
      */
     private function save_license_data($license_data) {
         $this->license_data = $license_data;
-        update_option('image_convertor_license_data', $license_data);
+        update_option('wyoshi_img_opt_license_data', $license_data);
     }
     
     /**
@@ -395,7 +393,7 @@ class LicenseManager {
      */
     private function clear_license_data() {
         $this->license_data = null;
-        delete_option('image_convertor_license_data');
+        delete_option('wyoshi_img_opt_license_data');
     }
     
     /**
@@ -420,7 +418,7 @@ class LicenseManager {
         $url = self::LICENSE_SERVER_URL . '/' . $action;
         
         $request_data = array_merge($data, [
-            'version' => IMAGE_CONVERTOR_VERSION,
+            'version' => WYOSHI_IMG_OPT_VERSION,
             'php_version' => PHP_VERSION,
             'wp_version' => get_bloginfo('version')
         ]);
@@ -429,7 +427,7 @@ class LicenseManager {
             'timeout' => 30,
             'body' => $request_data,
             'headers' => [
-                'User-Agent' => 'Image Convertor Pro/' . IMAGE_CONVERTOR_VERSION
+                'User-Agent' => 'Wyoshi Image Optimizer Pro/' . WYOSHI_IMG_OPT_VERSION
             ]
         ]);
         

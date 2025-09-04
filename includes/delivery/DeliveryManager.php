@@ -4,15 +4,15 @@
  * 
  * Handles frontend image delivery and picture tag replacement
  * 
- * @package ImageConvertor
+ * @package WyoshiImageOptimizer
  * @subpackage Delivery
  * @since 1.0.0
  */
 
-namespace ImageConvertor\Delivery;
+namespace WyoshiImageOptimizer\Delivery;
 
-use AdvancedImageOptimizer\Common\Logger;
-use AdvancedImageOptimizer\Common\Utils;
+use WyoshiImageOptimizer\Common\Logger;
+use WyoshiImageOptimizer\Common\Utils;
 
 class DeliveryManager {
     
@@ -44,7 +44,7 @@ class DeliveryManager {
      */
     public function __construct(Logger $logger) {
         $this->logger = $logger;
-        $this->options = get_option('image_convertor_options', []);
+        $this->options = get_option('wyoshi_img_opt_options', []);
     }
     
     /**
@@ -264,12 +264,12 @@ class DeliveryManager {
     public function add_rewrite_rules() {
         add_rewrite_rule(
             '^image-convertor/([^/]+)/(.+)$',
-            'index.php?image_convertor_format=$matches[1]&image_convertor_path=$matches[2]',
+            'index.php?wyoshi_img_opt_format=$matches[1]&wyoshi_img_opt_path=$matches[2]',
             'top'
         );
         
-        add_rewrite_tag('%image_convertor_format%', '([^&]+)');
-        add_rewrite_tag('%image_convertor_path%', '([^&]+)');
+        add_rewrite_tag('%wyoshi_img_opt_format%', '([^&]+)');
+        add_rewrite_tag('%wyoshi_img_opt_path%', '([^&]+)');
     }
     
     /**
@@ -278,8 +278,8 @@ class DeliveryManager {
      * @return void
      */
     public function serve_optimized_image() {
-        $format = get_query_var('image_convertor_format');
-        $path = get_query_var('image_convertor_path');
+        $format = get_query_var('wyoshi_img_opt_format');
+        $path = get_query_var('wyoshi_img_opt_path');
         
         if (!$format || !$path) {
             return;

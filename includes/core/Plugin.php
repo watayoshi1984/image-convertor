@@ -1,24 +1,26 @@
 <?php
 /**
  * Main Plugin Class
- * 
- * Orchestrates all plugin components and handles initialization
- * 
- * @package ImageConvertor
- * @subpackage Core
+ *
+ * @package WyoshiImageOptimizer
  * @since 1.0.0
  */
 
-namespace ImageConvertor\Core;
+namespace WyoshiImageOptimizer;
 
-use AdvancedImageOptimizer\Processing\BinaryWrapper;
-use AdvancedImageOptimizer\Processing\ImageProcessor;
-use AdvancedImageOptimizer\Admin\AdminManager;
-use ImageConvertor\Media\MediaManager;
-use ImageConvertor\Delivery\DeliveryManager;
-use AdvancedImageOptimizer\Common\Utils;
-use ImageConvertor\Pro\ProManager;
-use AdvancedImageOptimizer\Common\Logger;
+use WyoshiImageOptimizer\Processing\BinaryWrapper;
+use WyoshiImageOptimizer\Processing\ImageProcessor;
+use WyoshiImageOptimizer\Admin\AdminManager;
+use WyoshiImageOptimizer\Media\MediaManager;
+use WyoshiImageOptimizer\Delivery\DeliveryManager;
+use WyoshiImageOptimizer\Common\Utils;
+use WyoshiImageOptimizer\Pro\ProManager;
+use WyoshiImageOptimizer\Common\Logger;
+
+// Prevent direct access
+if (!defined('ABSPATH')) {
+    exit;
+}
 
 class Plugin {
     
@@ -110,7 +112,7 @@ class Plugin {
      */
     private function __construct() {
         // Load options
-        $this->options = get_option('image_convertor_options', []);
+        $this->options = get_option('wyoshi_img_opt_options', []);
         
         // Initialize logger first
         $this->logger = new Logger();
@@ -126,6 +128,13 @@ class Plugin {
             return;
         }
         
+        // Check if initialization is already in progress to prevent race conditions
+        static $initializing = false;
+        if ($initializing) {
+            return;
+        }
+        $initializing = true;
+        
         try {
             // Initialize core components
             $this->init_core_components();
@@ -139,11 +148,16 @@ class Plugin {
             // Mark as initialized
             $this->initialized = true;
             
-            $this->logger->info('Plugin initialized successfully', [
-                'version' => IMAGE_CONVERTOR_VERSION,
-                'php_version' => PHP_VERSION,
-                'wp_version' => get_bloginfo('version')
-            ]);
+            // Only log initialization once per request
+            static $logged_init = false;
+            if (!$logged_init) {
+                $this->logger->info('Plugin initialized successfully', [
+                    'version' => WYOSHI_IMG_OPT_VERSION,
+                    'php_version' => PHP_VERSION,
+                    'wp_version' => get_bloginfo('version')
+                ]);
+                $logged_init = true;
+            }
             
         } catch (Exception $e) {
             $this->logger->error('Plugin initialization failed', [
@@ -157,6 +171,8 @@ class Plugin {
                 echo '<strong>Image Convertor:</strong> 初期化に失敗しました: ' . esc_html($e->getMessage());
                 echo '</p></div>';
             });
+        } finally {
+            $initializing = false;
         }
     }
     
@@ -207,14 +223,14 @@ class Plugin {
      */
     private function register_hooks() {
         // Activation/deactivation hooks
-        register_activation_hook(IMAGE_CONVERTOR_PLUGIN_FILE, [$this, 'activate']);
-        register_deactivation_hook(IMAGE_CONVERTOR_PLUGIN_FILE, [$this, 'deactivate']);
+        register_activation_hook(WYOSHI_IMG_OPT_PLUGIN_FILE, [$this, 'activate']);
+        register_deactivation_hook(WYOSHI_IMG_OPT_PLUGIN_FILE, [$this, 'deactivate']);
         
-        // Uninstall hook
-        register_uninstall_hook(IMAGE_CONVERTOR_PLUGIN_FILE, [__CLASS__, 'uninstall']);
+        // Register uninstall hook
+        register_uninstall_hook(WYOSHI_IMG_OPT_PLUGIN_FILE, [__CLASS__, 'uninstall']);
         
         // Plugin action links
-        add_filter('plugin_action_links_' . plugin_basename(IMAGE_CONVERTOR_PLUGIN_FILE), [$this, 'add_action_links']);
+        add_filter('plugin_action_links_' . plugin_basename(WYOSHI_IMG_OPT_PLUGIN_FILE), [$this, 'add_action_links']);
         
         // Plugin row meta
         add_filter('plugin_row_meta', [$this, 'add_row_meta'], 10, 2);
@@ -224,15 +240,15 @@ class Plugin {
         
         // AJAX handlers for non-admin users
         if (!is_admin()) {
-            add_action('wp_ajax_nopriv_image_convertor_serve', [$this, 'ajax_serve_image']);
+            add_action('wp_ajax_nopriv_wyoshi_img_opt_serve', [$this, 'ajax_serve_image']);
         }
         
-        // Cron hooks
-        add_action('image_convertor_cleanup', [$this, 'cleanup_old_files']);
+        // Scheduled events
+        add_action('wyoshi_img_opt_cleanup', [$this, 'cleanup_old_files']);
         
         // Schedule cleanup if not already scheduled
-        if (!wp_next_scheduled('image_convertor_cleanup')) {
-            wp_schedule_event(time(), 'daily', 'image_convertor_cleanup');
+        if (!wp_next_scheduled('wyoshi_img_opt_cleanup')) {
+            wp_schedule_event(time(), 'daily', 'wyoshi_img_opt_cleanup');
         }
     }
     
@@ -245,7 +261,7 @@ class Plugin {
         try {
             // Create default options
             $default_options = $this->get_default_options();
-            add_option('image_convertor_options', $default_options);
+            add_option('wyoshi_img_opt_options', $default_options);
             
             // Create necessary directories
             $this->create_directories();
@@ -260,7 +276,7 @@ class Plugin {
             flush_rewrite_rules();
             
             $this->logger->info('Plugin activated successfully', [
-                'version' => IMAGE_CONVERTOR_VERSION
+                'version' => WYOSHI_IMG_OPT_VERSION
             ]);
             
         } catch (Exception $e) {
@@ -280,7 +296,7 @@ class Plugin {
     public function deactivate() {
         try {
             // Clear scheduled cron jobs
-            wp_clear_scheduled_hook('image_convertor_cleanup');
+            wp_clear_scheduled_hook('wyoshi_img_opt_cleanup');
             
             // Flush rewrite rules
             flush_rewrite_rules();
@@ -301,24 +317,24 @@ class Plugin {
      */
     public static function uninstall() {
         // Remove options
-        delete_option('image_convertor_options');
-        delete_option('image_convertor_stats');
+        delete_option('wyoshi_img_opt_options');
+        delete_option('wyoshi_img_opt_stats');
         
         // Remove transients
-        delete_transient('image_convertor_binary_status');
-        delete_transient('image_convertor_system_info');
+        delete_transient('wyoshi_img_opt_binary_status');
+        delete_transient('wyoshi_img_opt_system_info');
         
         // Remove user meta
-        delete_metadata('user', 0, 'image_convertor_dismissed_notices', '', true);
+        delete_metadata('user', 0, 'wyoshi_img_opt_dismissed_notices', '', true);
         
         // Clean up files if option is set
-        $options = get_option('image_convertor_options', []);
+        $options = get_option('wyoshi_img_opt_options', []);
         if (!empty($options['remove_data_on_uninstall'])) {
             self::cleanup_all_files();
         }
         
         // Clear cron jobs
-        wp_clear_scheduled_hook('image_convertor_cleanup');
+        wp_clear_scheduled_hook('wyoshi_img_opt_cleanup');
     }
     
     /**
@@ -329,8 +345,8 @@ class Plugin {
      */
     public function add_action_links($links) {
         $plugin_links = [
-            '<a href="' . admin_url('admin.php?page=image-convertor') . '">設定</a>',
-            '<a href="' . admin_url('admin.php?page=image-convertor-stats') . '">統計</a>'
+            '<a href="' . admin_url('admin.php?page=wyoshi-img-opt') . '">設定</a>',
+            '<a href="' . admin_url('admin.php?page=wyoshi-img-opt-stats') . '">統計</a>'
         ];
         
         return array_merge($plugin_links, $links);
@@ -344,7 +360,7 @@ class Plugin {
      * @return array Modified links
      */
     public function add_row_meta($links, $file) {
-        if (plugin_basename(IMAGE_CONVERTOR_PLUGIN_FILE) === $file) {
+        if (plugin_basename(WYOSHI_IMG_OPT_PLUGIN_FILE) === $file) {
             $row_meta = [
                 'docs' => '<a href="https://example.com/docs" target="_blank">ドキュメント</a>',
                 'support' => '<a href="https://example.com/support" target="_blank">サポート</a>',
@@ -383,12 +399,12 @@ class Plugin {
         }
         
         // Show welcome notice for new installations
-        if (get_transient('image_convertor_show_welcome')) {
-            delete_transient('image_convertor_show_welcome');
+        if (get_transient('wyoshi_img_opt_show_welcome')) {
+            delete_transient('wyoshi_img_opt_show_welcome');
             
             echo '<div class="notice notice-success is-dismissible">';
-            echo '<p><strong>Image Convertor が有効化されました！</strong></p>';
-            echo '<p><a href="' . admin_url('admin.php?page=image-convertor') . '" class="button button-primary">設定を開始</a></p>';
+            echo '<p><strong>Wyoshi Image Optimizer が有効化されました！</strong></p>';
+            echo '<p><a href="' . admin_url('admin.php?page=wyoshi-img-opt') . '" class="button button-primary">設定を開始</a></p>';
             echo '</div>';
         }
     }
@@ -488,7 +504,7 @@ class Plugin {
      */
     private function create_directories() {
         $upload_dir = wp_upload_dir();
-        $backup_dir = $upload_dir['basedir'] . '/image-convertor-backups';
+        $backup_dir = $upload_dir['basedir'] . '/wyoshi-img-opt-backups';
         
         if (!file_exists($backup_dir)) {
             wp_mkdir_p($backup_dir);
@@ -499,7 +515,7 @@ class Plugin {
         }
         
         // Create logs directory
-        $logs_dir = IMAGE_CONVERTOR_PLUGIN_DIR . 'logs';
+        $logs_dir = WYOSHI_IMG_OPT_PLUGIN_DIR . 'logs';
         if (!file_exists($logs_dir)) {
             wp_mkdir_p($logs_dir);
             
@@ -522,7 +538,7 @@ class Plugin {
         
         // Example table for optimization history (not implemented yet)
         /*
-        $table_name = $wpdb->prefix . 'image_convertor_history';
+        $table_name = $wpdb->prefix . 'wyoshi_img_opt_history';
         
         $sql = "CREATE TABLE $table_name (
             id mediumint(9) NOT NULL AUTO_INCREMENT,
@@ -547,8 +563,8 @@ class Plugin {
      */
     private function setup_cron_jobs() {
         // Schedule cleanup job
-        if (!wp_next_scheduled('image_convertor_cleanup')) {
-            wp_schedule_event(time(), 'daily', 'image_convertor_cleanup');
+        if (!wp_next_scheduled('wyoshi_img_opt_cleanup')) {
+            wp_schedule_event(time(), 'daily', 'wyoshi_img_opt_cleanup');
         }
     }
     
@@ -560,7 +576,7 @@ class Plugin {
      */
     private function cleanup_temp_files($cutoff_time) {
         $temp_dir = sys_get_temp_dir();
-        $pattern = $temp_dir . '/image-convertor-*';
+        $pattern = $temp_dir . '/wyoshi-img-opt-*';
         
         $files = glob($pattern);
         
@@ -582,13 +598,13 @@ class Plugin {
         $upload_dir = wp_upload_dir();
         
         // Remove backup directory
-        $backup_dir = $upload_dir['basedir'] . '/image-convertor-backups';
+        $backup_dir = $upload_dir['basedir'] . '/wyoshi-img-opt-backups';
         if (file_exists($backup_dir)) {
             Utils::delete_directory($backup_dir);
         }
         
         // Remove logs directory
-        $logs_dir = IMAGE_CONVERTOR_PLUGIN_DIR . 'logs';
+        $logs_dir = WYOSHI_IMG_OPT_PLUGIN_DIR . 'logs';
         if (file_exists($logs_dir)) {
             Utils::delete_directory($logs_dir);
         }
@@ -723,7 +739,7 @@ class Plugin {
      */
     public function update_options($options) {
         $this->options = $options;
-        return update_option('image_convertor_options', $options);
+        return update_option('wyoshi_img_opt_options', $options);
     }
     
     /**

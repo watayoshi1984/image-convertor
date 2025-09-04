@@ -202,7 +202,7 @@ if (!defined('ABSPATH')) {
         </div>
 
         <!-- Pro Features Promotion -->
-        <?php if (!defined('ADVANCED_IMAGE_OPTIMIZER_PRO_VERSION')): ?>
+        <?php if (!defined('WYOSHI_IMG_OPT_PRO_VERSION')): ?>
         <div class="aio-pro-promotion">
             <div class="aio-card aio-pro-card">
                 <div class="aio-card-header">
@@ -275,7 +275,7 @@ jQuery(document).ready(function($) {
             url: aioAdmin.ajaxUrl,
             type: 'POST',
             data: {
-                action: 'aio_bulk_optimize',
+                action: 'wyoshi_img_opt_bulk_optimize',
                 nonce: aioAdmin.nonce,
                 offset: bulkOptimizationOffset
             },
@@ -338,7 +338,7 @@ jQuery(document).ready(function($) {
             url: aioAdmin.ajaxUrl,
             type: 'POST',
             data: {
-                action: 'aio_test_binaries',
+                action: 'wyoshi_img_opt_test_binaries',
                 nonce: aioAdmin.nonce
             },
             success: function(response) {

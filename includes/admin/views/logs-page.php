@@ -279,7 +279,7 @@ jQuery(document).ready(function($) {
             url: aioAdmin.ajaxUrl,
             type: 'POST',
             data: {
-                action: 'aio_get_logs',
+                action: 'wyoshi_img_opt_get_logs',
                 nonce: aioAdmin.nonce,
                 filters: filters,
                 page: page
@@ -406,7 +406,7 @@ jQuery(document).ready(function($) {
             url: aioAdmin.ajaxUrl,
             type: 'POST',
             data: {
-                action: 'aio_clear_logs',
+                action: 'wyoshi_img_opt_clear_logs',
                 nonce: aioAdmin.nonce
             },
             success: function(response) {

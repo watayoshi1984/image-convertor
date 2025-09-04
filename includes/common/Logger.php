@@ -2,11 +2,11 @@
 /**
  * Logger Class
  *
- * @package AdvancedImageOptimizer\Common
+ * @package WyoshiImageOptimizer\Common
  * @since 1.0.0
  */
 
-namespace AdvancedImageOptimizer\Common;
+namespace WyoshiImageOptimizer\Common;
 
 /**
  * Logger Class
@@ -206,6 +206,14 @@ class Logger {
             return;
         }
         
+        // Prevent duplicate log entries within the same request
+        static $logged_messages = [];
+        $message_hash = md5($level . $message . serialize($context));
+        if (isset($logged_messages[$message_hash])) {
+            return;
+        }
+        $logged_messages[$message_hash] = true;
+        
         // Rotate log file if needed
         $this->rotate_log_if_needed();
         
@@ -227,7 +235,7 @@ class Logger {
      * @return bool True if logging is enabled
      */
     private function is_logging_enabled() {
-        $options = get_option('advanced_image_optimizer_options', []);
+        $options = get_option('wyoshi_img_opt_options', []);
         return isset($options['enable_logging']) ? $options['enable_logging'] : true;
     }
 

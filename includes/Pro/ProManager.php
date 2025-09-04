@@ -4,16 +4,19 @@
  * 
  * Manages Pro version features and integrations
  * 
- * @package ImageConvertor
+ * @package WyoshiImageOptimizer
  * @subpackage Pro
  * @since 1.0.0
  */
 
-namespace ImageConvertor\Pro;
+namespace WyoshiImageOptimizer\Pro;
 
-use AdvancedImageOptimizer\Common\Logger;
-use AdvancedImageOptimizer\Processing\BinaryWrapper;
-use AdvancedImageOptimizer\Processing\ImageProcessor;
+use WyoshiImageOptimizer\Common\Logger;
+use WyoshiImageOptimizer\Common\Utils;
+use WyoshiImageOptimizer\Processing\BinaryWrapper;
+use WyoshiImageOptimizer\Processing\ImageProcessor;
+use WyoshiImageOptimizer\Pro\LicenseManager;
+use WyoshiImageOptimizer\Pro\AvifProcessor;
 
 class ProManager {
     
@@ -119,28 +122,28 @@ class ProManager {
         if (is_admin()) {
             add_action('admin_menu', [$this, 'add_pro_menu_items'], 20);
             add_action('admin_notices', [$this, 'show_pro_notices']);
-            add_filter('image_convertor_admin_tabs', [$this, 'add_pro_admin_tabs']);
+            add_filter('wyoshi_img_opt_admin_tabs', [$this, 'add_pro_admin_tabs']);
         }
         
-        // Image processing hooks
-        add_filter('image_convertor_supported_formats', [$this, 'add_avif_format']);
-        add_filter('image_convertor_conversion_options', [$this, 'add_avif_options']);
-        add_action('image_convertor_after_webp_conversion', [$this, 'maybe_convert_to_avif'], 10, 3);
+        // フォーマット関連のフィルター
+        add_filter('wyoshi_img_opt_supported_formats', [$this, 'add_avif_format']);
+        add_filter('wyoshi_img_opt_conversion_options', [$this, 'add_avif_options']);
+        add_action('wyoshi_img_opt_after_webp_conversion', [$this, 'maybe_convert_to_avif'], 10, 3);
         
-        // Delivery hooks
-        add_filter('image_convertor_delivery_formats', [$this, 'add_avif_delivery']);
-        add_filter('image_convertor_picture_sources', [$this, 'add_avif_sources'], 5, 3);
+        // 配信関連のフィルター
+        add_filter('wyoshi_img_opt_delivery_formats', [$this, 'add_avif_delivery']);
+        add_filter('wyoshi_img_opt_picture_sources', [$this, 'add_avif_sources'], 5, 3);
         
-        // Settings hooks
-        add_filter('image_convertor_default_options', [$this, 'add_pro_default_options']);
-        add_filter('image_convertor_settings_sections', [$this, 'add_pro_settings_sections']);
+        // 設定関連のフィルター
+        add_filter('wyoshi_img_opt_default_options', [$this, 'add_pro_default_options']);
+        add_filter('wyoshi_img_opt_settings_sections', [$this, 'add_pro_settings_sections']);
         
-        // Stats hooks
-        add_filter('image_convertor_stats_data', [$this, 'add_pro_stats_data']);
+        // 統計関連のフィルター
+        add_filter('wyoshi_img_opt_stats_data', [$this, 'add_pro_stats_data']);
         
-        // AJAX hooks
-        add_action('wp_ajax_image_convertor_bulk_avif_conversion', [$this, 'ajax_bulk_avif_conversion']);
-        add_action('wp_ajax_image_convertor_test_avif_support', [$this, 'ajax_test_avif_support']);
+        // Ajax アクション
+        add_action('wp_ajax_wyoshi_img_opt_bulk_avif_conversion', [$this, 'ajax_bulk_avif_conversion']);
+        add_action('wp_ajax_wyoshi_img_opt_test_avif_support', [$this, 'ajax_test_avif_support']);
     }
     
     /**
@@ -185,7 +188,7 @@ class ProManager {
         
         // Show upgrade notice if not licensed
         if (!$this->license_manager->is_license_active()) {
-            $dismissed = get_user_meta(get_current_user_id(), 'image_convertor_pro_notice_dismissed', true);
+            $dismissed = get_user_meta(get_current_user_id(), 'wyoshi_img_opt_pro_notice_dismissed', true);
             
             if (!$dismissed) {
                 echo '<div class="notice notice-info is-dismissible" data-notice="pro-upgrade">';
@@ -281,7 +284,7 @@ class ProManager {
             return;
         }
         
-        $plugin_options = get_option('image_convertor_options', []);
+        $plugin_options = get_option('wyoshi_img_opt_options', []);
         
         if (empty($plugin_options['generate_avif'])) {
             return;
@@ -306,7 +309,7 @@ class ProManager {
                 filesize($avif_path)
             );
             
-            do_action('image_convertor_avif_conversion_complete', $source_path, $avif_path, $options);
+            do_action('wyoshi_img_opt_avif_conversion_complete', $source_path, $avif_path, $options);
         }
     }
     
@@ -454,7 +457,7 @@ class ProManager {
      * @return void
      */
     public function ajax_bulk_avif_conversion() {
-        check_ajax_referer('image_convertor_admin_nonce', 'nonce');
+        check_ajax_referer('wyoshi_img_opt_admin_nonce', 'nonce');
         
         if (!current_user_can('manage_options')) {
             wp_send_json_error('権限が不足しています。');
@@ -520,7 +523,7 @@ class ProManager {
      * @return void
      */
     public function ajax_test_avif_support() {
-        check_ajax_referer('image_convertor_admin_nonce', 'nonce');
+        check_ajax_referer('wyoshi_img_opt_admin_nonce', 'nonce');
         
         if (!current_user_can('manage_options')) {
             wp_send_json_error('権限が不足しています。');
@@ -548,7 +551,7 @@ class ProManager {
      * @return void
      */
     public function render_upgrade_page() {
-        include IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Admin/views/upgrade-page.php';
+        include WYOSHI_IMG_OPT_PLUGIN_DIR . 'includes/Admin/views/upgrade-page.php';
     }
     
     /**
@@ -557,7 +560,7 @@ class ProManager {
      * @return void
      */
     public function render_license_page() {
-        include IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Admin/views/license-page.php';
+        include WYOSHI_IMG_OPT_PLUGIN_DIR . 'includes/Admin/views/license-page.php';
     }
     
     /**
@@ -566,7 +569,7 @@ class ProManager {
      * @return void
      */
     public function render_avif_settings_tab() {
-        include IMAGE_CONVERTOR_PLUGIN_DIR . 'includes/Admin/views/avif-settings-tab.php';
+        include WYOSHI_IMG_OPT_PLUGIN_DIR . 'includes/Admin/views/avif-settings-tab.php';
     }
     
     /**

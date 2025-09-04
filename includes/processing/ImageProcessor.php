@@ -2,14 +2,14 @@
 /**
  * Image Processor Class
  *
- * @package AdvancedImageOptimizer\Processing
+ * @package WyoshiImageOptimizer\Processing
  * @since 1.0.0
  */
 
-namespace AdvancedImageOptimizer\Processing;
+namespace WyoshiImageOptimizer\Processing;
 
-use AdvancedImageOptimizer\Common\Logger;
-use AdvancedImageOptimizer\Common\Utils;
+use WyoshiImageOptimizer\Common\Logger;
+use WyoshiImageOptimizer\Common\Utils;
 
 /**
  * Image Processor Class

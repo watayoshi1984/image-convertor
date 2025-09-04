@@ -4,16 +4,16 @@
  * 
  * Handles AVIF image format conversion (Pro feature)
  * 
- * @package ImageConvertor
+ * @package WyoshiImageOptimizer
  * @subpackage Pro
  * @since 1.0.0
  */
 
-namespace ImageConvertor\Pro;
+namespace WyoshiImageOptimizer\Pro;
 
-use AdvancedImageOptimizer\Common\Logger;
-use AdvancedImageOptimizer\Processing\BinaryWrapper;
-use AdvancedImageOptimizer\Common\Utils;
+use WyoshiImageOptimizer\Common\Logger;
+use WyoshiImageOptimizer\Processing\BinaryWrapper;
+use WyoshiImageOptimizer\Common\Utils;
 
 class AvifProcessor {
     
@@ -471,7 +471,7 @@ class AvifProcessor {
      * @return array Statistics
      */
     public function get_conversion_stats() {
-        $stats = get_option('image_convertor_avif_stats', [
+        $stats = get_option('wyoshi_img_opt_avif_stats', [
             'total_conversions' => 0,
             'total_original_size' => 0,
             'total_avif_size' => 0,
@@ -505,6 +505,6 @@ class AvifProcessor {
             );
         }
         
-        update_option('image_convertor_avif_stats', $stats);
+        update_option('wyoshi_img_opt_avif_stats', $stats);
     }
 }

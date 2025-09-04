@@ -2,14 +2,14 @@
 /**
  * Binary Wrapper Class
  *
- * @package AdvancedImageOptimizer\Processing
+ * @package WyoshiImageOptimizer\Processing
  * @since 1.0.0
  */
 
-namespace AdvancedImageOptimizer\Processing;
+namespace WyoshiImageOptimizer\Processing;
 
-use AdvancedImageOptimizer\Common\Logger;
-use AdvancedImageOptimizer\Common\Utils;
+use WyoshiImageOptimizer\Common\Logger;
+use WyoshiImageOptimizer\Common\Utils;
 
 /**
  * Binary Wrapper Class
@@ -119,9 +119,9 @@ class BinaryWrapper {
      */
     public function __construct(Logger $logger) {
         $this->logger = $logger;
-        $this->bin_dir = ADVANCED_IMAGE_OPTIMIZER_BIN_DIR;
+        $this->bin_dir = WYOSHI_IMG_OPT_BIN_DIR;
         $this->detect_system();
-        $this->check_binaries();
+        $this->load_cached_binary_status();
     }
 
     /**
@@ -168,6 +168,28 @@ class BinaryWrapper {
      */
     public function get_platform() {
         return $this->os . '-' . $this->architecture;
+    }
+
+    /**
+     * Load cached binary status or check binaries if cache is invalid
+     *
+     * @return void
+     */
+    private function load_cached_binary_status() {
+        $cache_key = 'wyoshi_img_opt_binary_status_' . $this->get_platform();
+        $cached_status = get_transient($cache_key);
+        
+        if ($cached_status !== false && is_array($cached_status)) {
+            $this->binary_status = $cached_status;
+            $this->logger->debug('Loaded cached binary status', $this->binary_status);
+            return;
+        }
+        
+        // Cache miss or invalid, check binaries
+        $this->check_binaries();
+        
+        // Cache the result for 1 hour
+        set_transient($cache_key, $this->binary_status, HOUR_IN_SECONDS);
     }
 
     /**
@@ -543,6 +565,10 @@ class BinaryWrapper {
     public function refresh_binary_status() {
         $this->binary_status = [];
         $this->check_binaries();
+        
+        // Update cache
+        $cache_key = 'wyoshi_img_opt_binary_status_' . $this->get_platform();
+        set_transient($cache_key, $this->binary_status, HOUR_IN_SECONDS);
     }
 
     /**

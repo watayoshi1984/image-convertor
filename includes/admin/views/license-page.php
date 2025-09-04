@@ -2,7 +2,7 @@
 /**
  * License Management Page Template
  * 
- * @package ImageConvertor
+ * @package WyoshiImageOptimizer
  * @subpackage Admin\Views
  * @since 1.0.0
  */
@@ -12,7 +12,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-$plugin = \ImageConvertor\Core\Plugin::get_instance();
+$plugin = \WyoshiImageOptimizer\Plugin::get_instance();
 $pro_manager = $plugin->get_pro_manager();
 $license_manager = $pro_manager->get_license_manager();
 $license_data = $license_manager->get_license_data();
@@ -20,7 +20,7 @@ $is_active = $license_manager->is_license_active();
 
 ?>
 
-<div class="wrap image-convertor-license-page">
+<div class="wrap wyoshi-img-opt-license-page">
     <h1>ライセンス管理</h1>
     
     <?php if ($is_active): ?>
@@ -230,9 +230,9 @@ jQuery(document).ready(function($) {
             url: ajaxurl,
             type: 'POST',
             data: {
-                action: 'image_convertor_activate_license',
+                action: 'wyoshi_img_opt_activate_license',
                 license_key: licenseKey,
-                nonce: '<?php echo wp_create_nonce('image_convertor_admin_nonce'); ?>'
+                nonce: '<?php echo wp_create_nonce('wyoshi_img_opt_admin_nonce'); ?>'
             },
             success: function(response) {
                 if (response.success) {
@@ -263,8 +263,8 @@ jQuery(document).ready(function($) {
             url: ajaxurl,
             type: 'POST',
             data: {
-                action: 'image_convertor_check_license',
-                nonce: '<?php echo wp_create_nonce('image_convertor_admin_nonce'); ?>'
+                action: 'wyoshi_img_opt_check_license',
+                nonce: '<?php echo wp_create_nonce('wyoshi_img_opt_admin_nonce'); ?>'
             },
             success: function(response) {
                 if (response.success) {
@@ -298,8 +298,8 @@ jQuery(document).ready(function($) {
             url: ajaxurl,
             type: 'POST',
             data: {
-                action: 'image_convertor_deactivate_license',
-                nonce: '<?php echo wp_create_nonce('image_convertor_admin_nonce'); ?>'
+                action: 'wyoshi_img_opt_deactivate_license',
+                nonce: '<?php echo wp_create_nonce('wyoshi_img_opt_admin_nonce'); ?>'
             },
             success: function(response) {
                 if (response.success) {
@@ -324,9 +324,9 @@ jQuery(document).ready(function($) {
             url: ajaxurl,
             type: 'POST',
             data: {
-                action: 'image_convertor_dismiss_notice',
+                action: 'wyoshi_img_opt_dismiss_notice',
                 notice: 'pro-upgrade',
-                nonce: '<?php echo wp_create_nonce('image_convertor_admin_nonce'); ?>'
+                nonce: '<?php echo wp_create_nonce('wyoshi_img_opt_admin_nonce'); ?>'
             }
         });
     });

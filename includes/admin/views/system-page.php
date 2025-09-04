@@ -54,7 +54,7 @@ if (!defined('ABSPATH')) {
                             </tr>
                             <tr>
                                 <td class="aio-system-label"><?php _e('Plugin Version:', 'advanced-image-optimizer'); ?></td>
-                                <td class="aio-system-value"><?php echo ADVANCED_IMAGE_OPTIMIZER_VERSION; ?></td>
+                                <td class="aio-system-value"><?php echo WYOSHI_IMG_OPT_VERSION; ?></td>
                             </tr>
                         </tbody>
                     </table>
@@ -293,17 +293,17 @@ if (!defined('ABSPATH')) {
                         <tbody>
                             <tr>
                                 <td class="aio-system-label"><?php _e('Plugin Directory:', 'advanced-image-optimizer'); ?></td>
-                                <td class="aio-system-value"><?php echo esc_html(ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR); ?></td>
+                                <td class="aio-system-value"><?php echo esc_html(WYOSHI_IMG_OPT_PLUGIN_DIR); ?></td>
                             </tr>
                             <tr>
                                 <td class="aio-system-label"><?php _e('Plugin URL:', 'advanced-image-optimizer'); ?></td>
-                                <td class="aio-system-value"><?php echo esc_html(ADVANCED_IMAGE_OPTIMIZER_PLUGIN_URL); ?></td>
+                                <td class="aio-system-value"><?php echo esc_html(WYOSHI_IMG_OPT_PLUGIN_URL); ?></td>
                             </tr>
                             <tr>
                                 <td class="aio-system-label"><?php _e('Binary Directory:', 'advanced-image-optimizer'); ?></td>
                                 <td class="aio-system-value">
                                     <?php
-                                    $binary_dir = ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR . 'binaries/' . $system_info['os'] . '/' . $system_info['architecture'] . '/';
+                                    $binary_dir = WYOSHI_IMG_OPT_PLUGIN_DIR . 'binaries/' . $system_info['os'] . '/' . $system_info['architecture'] . '/';
                                     echo esc_html($binary_dir);
                                     ?>
                                     <br>
@@ -313,7 +313,7 @@ if (!defined('ABSPATH')) {
                             <tr>
                                 <td class="aio-system-label"><?php _e('License Status:', 'advanced-image-optimizer'); ?></td>
                                 <td class="aio-system-value">
-                                    <?php if (defined('ADVANCED_IMAGE_OPTIMIZER_PRO_VERSION')): ?>
+                                    <?php if (defined('WYOSHI_IMG_OPT_PRO_VERSION')): ?>
                                         <span class="aio-status-good"><?php _e('Pro Version Active', 'advanced-image-optimizer'); ?></span>
                                     <?php else: ?>
                                         <span class="aio-status-info"><?php _e('Free Version', 'advanced-image-optimizer'); ?></span>
@@ -333,6 +333,7 @@ if (!defined('ABSPATH')) {
                     <h3><?php _e('Export System Information', 'advanced-image-optimizer'); ?></h3>
                 </div>
                 <div class="aio-card-content">
+                    <?php $options = get_option('wyoshi_img_opt_options', []); ?>
                     <p><?php _e('Export system information for support purposes.', 'advanced-image-optimizer'); ?></p>
                     <div class="aio-export-actions">
                         <button type="button" class="button button-primary" id="aio-export-system-info">
@@ -346,7 +347,7 @@ if (!defined('ABSPATH')) {
                     </div>
                     <textarea id="aio-system-info-text" class="aio-system-info-textarea" readonly style="display: none;"><?php
                         echo "=== Advanced Image Optimizer System Information ===\n\n";
-                        echo "Plugin Version: " . ADVANCED_IMAGE_OPTIMIZER_VERSION . "\n";
+                        echo "Plugin Version: " . WYOSHI_IMG_OPT_VERSION . "\n";
                         echo "WordPress Version: " . get_bloginfo('version') . "\n";
                         echo "PHP Version: " . PHP_VERSION . "\n";
                         echo "Operating System: " . ($system_info['os'] ?? 'Unknown') . "\n";
@@ -388,7 +389,7 @@ jQuery(document).ready(function($) {
             url: aioAdmin.ajaxUrl,
             type: 'POST',
             data: {
-                action: 'aio_test_binaries',
+                action: 'wyoshi_img_opt_test_binaries',
                 nonce: aioAdmin.nonce
             },
             success: function(response) {

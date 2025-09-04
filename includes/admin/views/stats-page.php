@@ -11,6 +11,28 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+$stats = get_option('wyoshi_img_opt_stats', [
+    'optimized_images' => 0,
+    'total_savings' => 0,
+    'webp_generated' => 0,
+    'avif_generated' => 0,
+    'jpeg_optimized' => 0,
+    'jpeg_savings' => 0,
+    'jpeg_avg_compression' => 0,
+    'png_optimized' => 0,
+    'png_savings' => 0,
+    'png_avg_compression' => 0,
+    'webp_savings' => 0,
+    'webp_avg_compression' => 0,
+    'avif_savings' => 0,
+    'avif_avg_compression' => 0,
+    'avg_processing_time' => 0,
+    'total_processing_time' => 0,
+    'success_rate' => 0,
+    'failed_optimizations' => 0,
+    'daily_activity' => array_fill(0, 30, 0)
+]);
+
 ?>
 <div class="wrap">
     <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
@@ -135,7 +157,7 @@ if (!defined('ABSPATH')) {
                             <div class="aio-stats-item">
                                 <div class="aio-stats-item-header">
                                     <h4><?php _e('AVIF Images', 'advanced-image-optimizer'); ?></h4>
-                                    <?php if (!defined('ADVANCED_IMAGE_OPTIMIZER_PRO_VERSION')): ?>
+                                    <?php if (!defined('WYOSHI_IMG_OPT_PRO_VERSION')): ?>
                                         <span class="aio-pro-badge"><?php _e('Pro', 'advanced-image-optimizer'); ?></span>
                                     <?php endif; ?>
                                 </div>
@@ -218,10 +240,10 @@ if (!defined('ABSPATH')) {
                             'post_type' => 'attachment',
                             'post_mime_type' => 'image',
                             'posts_per_page' => 10,
-                            'meta_key' => '_aio_optimization_data',
+                            'meta_key' => '_wyoshi_img_opt_data',
                             'meta_query' => [
                                 [
-                                    'key' => '_aio_optimized',
+                                    'key' => '_wyoshi_img_opt_optimized',
                                     'value' => true,
                                     'compare' => '='
                                 ]
@@ -247,7 +269,7 @@ if (!defined('ABSPATH')) {
                                     <tbody>
                                         <?php foreach ($top_images as $image): ?>
                                             <?php
-                                            $optimization_data = get_post_meta($image->ID, '_aio_optimization_data', true);
+                                            $optimization_data = get_post_meta($image->ID, '_wyoshi_img_opt_data', true);
                                             if (!$optimization_data) continue;
                                             
                                             $savings = $optimization_data['original_size'] - $optimization_data['optimized_size'];
@@ -326,7 +348,7 @@ jQuery(document).ready(function($) {
             url: aioAdmin.ajaxUrl,
             type: 'POST',
             data: {
-                action: 'aio_get_stats',
+                action: 'wyoshi_img_opt_get_stats',
                 nonce: aioAdmin.nonce
             },
             success: function(response) {
@@ -347,7 +369,7 @@ jQuery(document).ready(function($) {
     
     // Export statistics
     $('#aio-export-stats').on('click', function() {
-        window.location.href = ajaxurl + '?action=aio_export_stats&nonce=' + aioAdmin.nonce;
+        window.location.href = ajaxurl + '?action=wyoshi_img_opt_export_stats&nonce=' + aioAdmin.nonce;
     });
     
     // Reset statistics
@@ -365,7 +387,7 @@ jQuery(document).ready(function($) {
             url: aioAdmin.ajaxUrl,
             type: 'POST',
             data: {
-                action: 'aio_reset_stats',
+                action: 'wyoshi_img_opt_reset_stats',
                 nonce: aioAdmin.nonce
             },
             success: function(response) {

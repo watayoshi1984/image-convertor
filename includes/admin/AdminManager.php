@@ -2,15 +2,15 @@
 /**
  * Admin Manager Class
  *
- * @package AdvancedImageOptimizer\Admin
+ * @package WyoshiImageOptimizer\Admin
  * @since 1.0.0
  */
 
-namespace AdvancedImageOptimizer\Admin;
+namespace WyoshiImageOptimizer\Admin;
 
-use AdvancedImageOptimizer\Common\Logger;
-use AdvancedImageOptimizer\Common\Utils;
-use AdvancedImageOptimizer\Processing\ImageProcessor;
+use WyoshiImageOptimizer\Common\Logger;
+use WyoshiImageOptimizer\Common\Utils;
+use WyoshiImageOptimizer\Processing\ImageProcessor;
 
 /**
  * Admin Manager Class
@@ -51,7 +51,7 @@ class AdminManager {
     public function __construct(Logger $logger, ImageProcessor $image_processor) {
         $this->logger = $logger;
         $this->image_processor = $image_processor;
-        $this->options = get_option('advanced_image_optimizer_options', []);
+        $this->options = get_option('wyoshi_img_opt_options', []);
     }
 
     /**
@@ -73,11 +73,11 @@ class AdminManager {
         add_filter('handle_bulk_actions-upload', [$this, 'handle_bulk_actions'], 10, 3);
         
         // AJAX handlers
-        add_action('wp_ajax_aio_optimize_image', [$this, 'ajax_optimize_image']);
-        add_action('wp_ajax_aio_bulk_optimize', [$this, 'ajax_bulk_optimize']);
-        add_action('wp_ajax_aio_get_stats', [$this, 'ajax_get_stats']);
-        add_action('wp_ajax_aio_test_binaries', [$this, 'ajax_test_binaries']);
-        add_action('wp_ajax_aio_clear_logs', [$this, 'ajax_clear_logs']);
+        add_action('wp_ajax_wyoshi_img_opt_optimize_image', [$this, 'ajax_optimize_image']);
+        add_action('wp_ajax_wyoshi_img_opt_bulk_optimize', [$this, 'ajax_bulk_optimize']);
+        add_action('wp_ajax_wyoshi_img_opt_get_stats', [$this, 'ajax_get_stats']);
+        add_action('wp_ajax_wyoshi_img_opt_test_binaries', [$this, 'ajax_test_binaries']);
+        add_action('wp_ajax_wyoshi_img_opt_clear_logs', [$this, 'ajax_clear_logs']);
     }
 
     /**
@@ -86,10 +86,10 @@ class AdminManager {
     public function add_admin_menu() {
         // Main menu page
         add_menu_page(
-            __('Advanced Image Optimizer', 'advanced-image-optimizer'),
-            __('Image Optimizer', 'advanced-image-optimizer'),
+            __('Wyoshi Image Optimizer', 'wyoshi-image-optimizer'),
+            __('Image Optimizer', 'wyoshi-image-optimizer'),
             'manage_options',
-            'advanced-image-optimizer',
+            'wyoshi-img-opt',
             [$this, 'render_main_page'],
             'dashicons-format-image',
             30
@@ -97,41 +97,41 @@ class AdminManager {
 
         // Settings submenu
         add_submenu_page(
-            'advanced-image-optimizer',
-            __('Settings', 'advanced-image-optimizer'),
-            __('Settings', 'advanced-image-optimizer'),
+            'wyoshi-img-opt',
+            __('Settings', 'wyoshi-image-optimizer'),
+            __('Settings', 'wyoshi-image-optimizer'),
             'manage_options',
-            'advanced-image-optimizer-settings',
+            'wyoshi-img-opt-settings',
             [$this, 'render_settings_page']
         );
 
         // Statistics submenu
         add_submenu_page(
-            'advanced-image-optimizer',
-            __('Statistics', 'advanced-image-optimizer'),
-            __('Statistics', 'advanced-image-optimizer'),
+            'wyoshi-img-opt',
+            __('Statistics', 'wyoshi-image-optimizer'),
+            __('Statistics', 'wyoshi-image-optimizer'),
             'manage_options',
-            'advanced-image-optimizer-stats',
+            'wyoshi-img-opt-stats',
             [$this, 'render_stats_page']
         );
 
         // System Info submenu
         add_submenu_page(
-            'advanced-image-optimizer',
-            __('System Info', 'advanced-image-optimizer'),
-            __('System Info', 'advanced-image-optimizer'),
+            'wyoshi-img-opt',
+            __('System Info', 'wyoshi-image-optimizer'),
+            __('System Info', 'wyoshi-image-optimizer'),
             'manage_options',
-            'advanced-image-optimizer-system',
+            'wyoshi-img-opt-system',
             [$this, 'render_system_page']
         );
 
         // Logs submenu
         add_submenu_page(
-            'advanced-image-optimizer',
-            __('Logs', 'advanced-image-optimizer'),
-            __('Logs', 'advanced-image-optimizer'),
+            'wyoshi-img-opt',
+            __('Logs', 'wyoshi-image-optimizer'),
+            __('Logs', 'wyoshi-image-optimizer'),
             'manage_options',
-            'advanced-image-optimizer-logs',
+            'wyoshi-img-opt-logs',
             [$this, 'render_logs_page']
         );
     }
@@ -141,33 +141,33 @@ class AdminManager {
      */
     public function register_settings() {
         register_setting(
-            'advanced_image_optimizer_options',
-            'advanced_image_optimizer_options',
+            'wyoshi_img_opt_options',
+            'wyoshi_img_opt_options',
             [$this, 'sanitize_options']
         );
 
         // General settings section
         add_settings_section(
-            'aio_general_section',
-            __('General Settings', 'advanced-image-optimizer'),
+            'wyoshi_img_opt_general_section',
+            __('General Settings', 'wyoshi-image-optimizer'),
             [$this, 'render_general_section'],
-            'advanced-image-optimizer-settings'
+            'wyoshi-img-opt-settings'
         );
 
         // Quality settings section
         add_settings_section(
-            'aio_quality_section',
-            __('Quality Settings', 'advanced-image-optimizer'),
+            'wyoshi_img_opt_quality_section',
+            __('Quality Settings', 'wyoshi-image-optimizer'),
             [$this, 'render_quality_section'],
-            'advanced-image-optimizer-settings'
+            'wyoshi-img-opt-settings'
         );
 
         // Advanced settings section
         add_settings_section(
-            'aio_advanced_section',
-            __('Advanced Settings', 'advanced-image-optimizer'),
+            'wyoshi_img_opt_advanced_section',
+            __('Advanced Settings', 'wyoshi-image-optimizer'),
             [$this, 'render_advanced_section'],
-            'advanced-image-optimizer-settings'
+            'wyoshi-img-opt-settings'
         );
 
         $this->add_settings_fields();
@@ -180,22 +180,22 @@ class AdminManager {
         // General settings fields
         add_settings_field(
             'auto_optimize',
-            __('Auto Optimize', 'advanced-image-optimizer'),
+            __('Auto Optimize', 'wyoshi-image-optimizer'),
             [$this, 'render_checkbox_field'],
-            'advanced-image-optimizer-settings',
-            'aio_general_section',
+            'wyoshi-img-opt-settings',
+            'wyoshi_img_opt_general_section',
             [
                 'name' => 'auto_optimize',
-                'description' => __('Automatically optimize images on upload', 'advanced-image-optimizer')
+                'description' => __('Automatically optimize images on upload', 'wyoshi-image-optimizer')
             ]
         );
 
         add_settings_field(
             'generate_webp',
-            __('Generate WebP', 'advanced-image-optimizer'),
+            __('Generate WebP', 'wyoshi-image-optimizer'),
             [$this, 'render_checkbox_field'],
-            'advanced-image-optimizer-settings',
-            'aio_general_section',
+            'wyoshi-img-opt-settings',
+            'wyoshi_img_opt_general_section',
             [
                 'name' => 'generate_webp',
                 'description' => __('Generate WebP versions of images', 'advanced-image-optimizer')
@@ -204,114 +204,114 @@ class AdminManager {
 
         add_settings_field(
             'generate_avif',
-            __('Generate AVIF', 'advanced-image-optimizer'),
+            __('Generate AVIF', 'wyoshi-image-optimizer'),
             [$this, 'render_checkbox_field'],
-            'advanced-image-optimizer-settings',
-            'aio_general_section',
+            'wyoshi-img-opt-settings',
+            'wyoshi_img_opt_general_section',
             [
                 'name' => 'generate_avif',
-                'description' => __('Generate AVIF versions of images (Pro feature)', 'advanced-image-optimizer')
+                'description' => __('Generate AVIF versions of images (Pro feature)', 'wyoshi-image-optimizer')
             ]
         );
 
         add_settings_field(
             'backup_original',
-            __('Backup Original', 'advanced-image-optimizer'),
+            __('Backup Original', 'wyoshi-image-optimizer'),
             [$this, 'render_checkbox_field'],
-            'advanced-image-optimizer-settings',
-            'aio_general_section',
+            'wyoshi-img-opt-settings',
+            'wyoshi_img_opt_general_section',
             [
                 'name' => 'backup_original',
-                'description' => __('Keep backup of original images', 'advanced-image-optimizer')
+                'description' => __('Keep backup of original images', 'wyoshi-image-optimizer')
             ]
         );
 
         // Quality settings fields
         add_settings_field(
             'webp_quality',
-            __('WebP Quality', 'advanced-image-optimizer'),
+            __('WebP Quality', 'wyoshi-image-optimizer'),
             [$this, 'render_number_field'],
-            'advanced-image-optimizer-settings',
-            'aio_quality_section',
+            'wyoshi-img-opt-settings',
+            'wyoshi_img_opt_quality_section',
             [
                 'name' => 'webp_quality',
                 'min' => 1,
                 'max' => 100,
                 'default' => 80,
-                'description' => __('WebP compression quality (1-100)', 'advanced-image-optimizer')
+                'description' => __('WebP compression quality (1-100)', 'wyoshi-image-optimizer')
             ]
         );
 
         add_settings_field(
             'avif_quality',
-            __('AVIF Quality', 'advanced-image-optimizer'),
+            __('AVIF Quality', 'wyoshi-image-optimizer'),
             [$this, 'render_number_field'],
-            'advanced-image-optimizer-settings',
-            'aio_quality_section',
+            'wyoshi-img-opt-settings',
+            'wyoshi_img_opt_quality_section',
             [
                 'name' => 'avif_quality',
                 'min' => 1,
                 'max' => 100,
                 'default' => 70,
-                'description' => __('AVIF compression quality (1-100)', 'advanced-image-optimizer')
+                'description' => __('AVIF compression quality (1-100)', 'wyoshi-image-optimizer')
             ]
         );
 
         add_settings_field(
             'jpeg_quality',
-            __('JPEG Quality', 'advanced-image-optimizer'),
+            __('JPEG Quality', 'wyoshi-image-optimizer'),
             [$this, 'render_number_field'],
-            'advanced-image-optimizer-settings',
-            'aio_quality_section',
+            'wyoshi-img-opt-settings',
+            'wyoshi_img_opt_quality_section',
             [
                 'name' => 'jpeg_quality',
                 'min' => 1,
                 'max' => 100,
                 'default' => 85,
-                'description' => __('JPEG compression quality (1-100)', 'advanced-image-optimizer')
+                'description' => __('JPEG compression quality (1-100)', 'wyoshi-image-optimizer')
             ]
         );
 
         // Advanced settings fields
         add_settings_field(
             'max_width',
-            __('Max Width', 'advanced-image-optimizer'),
+            __('Max Width', 'wyoshi-image-optimizer'),
             [$this, 'render_number_field'],
-            'advanced-image-optimizer-settings',
-            'aio_advanced_section',
+            'wyoshi-img-opt-settings',
+            'wyoshi_img_opt_advanced_section',
             [
                 'name' => 'max_width',
                 'min' => 0,
                 'max' => 10000,
                 'default' => 0,
-                'description' => __('Maximum image width (0 = no limit)', 'advanced-image-optimizer')
+                'description' => __('Maximum image width (0 = no limit)', 'wyoshi-image-optimizer')
             ]
         );
 
         add_settings_field(
             'max_height',
-            __('Max Height', 'advanced-image-optimizer'),
+            __('Max Height', 'wyoshi-image-optimizer'),
             [$this, 'render_number_field'],
-            'advanced-image-optimizer-settings',
-            'aio_advanced_section',
+            'wyoshi-img-opt-settings',
+            'wyoshi_img_opt_advanced_section',
             [
                 'name' => 'max_height',
                 'min' => 0,
                 'max' => 10000,
                 'default' => 0,
-                'description' => __('Maximum image height (0 = no limit)', 'advanced-image-optimizer')
+                'description' => __('Maximum image height (0 = no limit)', 'wyoshi-image-optimizer')
             ]
         );
 
         add_settings_field(
             'enable_logging',
-            __('Enable Logging', 'advanced-image-optimizer'),
+            __('Enable Logging', 'wyoshi-image-optimizer'),
             [$this, 'render_checkbox_field'],
-            'advanced-image-optimizer-settings',
-            'aio_advanced_section',
+            'wyoshi-img-opt-settings',
+            'wyoshi_img_opt_advanced_section',
             [
                 'name' => 'enable_logging',
-                'description' => __('Enable detailed logging for debugging', 'advanced-image-optimizer')
+                'description' => __('Enable detailed logging for debugging', 'wyoshi-image-optimizer')
             ]
         );
     }
@@ -329,17 +329,17 @@ class AdminManager {
 
         wp_enqueue_script(
             'aio-admin-js',
-            ADVANCED_IMAGE_OPTIMIZER_PLUGIN_URL . 'assets/js/admin.js',
+            WYOSHI_IMG_OPT_PLUGIN_URL . 'assets/js/admin.js',
             ['jquery'],
-            ADVANCED_IMAGE_OPTIMIZER_VERSION,
+            WYOSHI_IMG_OPT_VERSION,
             true
         );
 
         wp_enqueue_style(
             'aio-admin-css',
-            ADVANCED_IMAGE_OPTIMIZER_PLUGIN_URL . 'assets/css/admin.css',
+            WYOSHI_IMG_OPT_PLUGIN_URL . 'assets/css/admin.css',
             [],
-            ADVANCED_IMAGE_OPTIMIZER_VERSION
+            WYOSHI_IMG_OPT_VERSION
         );
 
         // Localize script
@@ -393,63 +393,82 @@ class AdminManager {
      * Render main admin page
      */
     public function render_main_page() {
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You do not have sufficient permissions to access this page.', 'wyoshi-image-optimizer'));
+        }
+        
         $stats = Utils::get_optimization_stats();
         $system_info = Utils::get_system_info();
         $capabilities = $this->image_processor->test_capabilities();
         
-        include ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR . 'includes/admin/views/main-page.php';
+        include WYOSHI_IMG_OPT_PLUGIN_DIR . 'includes/admin/views/main-page.php';
     }
 
     /**
      * Render settings page
      */
     public function render_settings_page() {
-        include ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR . 'includes/admin/views/settings-page.php';
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You do not have sufficient permissions to access this page.', 'wyoshi-image-optimizer'));
+        }
+        include WYOSHI_IMG_OPT_PLUGIN_DIR . 'includes/admin/views/settings-page.php';
     }
 
     /**
      * Render statistics page
      */
     public function render_stats_page() {
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You do not have sufficient permissions to access this page.', 'wyoshi-image-optimizer'));
+        }
+        
         $stats = Utils::get_optimization_stats();
-        include ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR . 'includes/admin/views/stats-page.php';
+        include WYOSHI_IMG_OPT_PLUGIN_DIR . 'includes/admin/views/stats-page.php';
     }
 
     /**
      * Render system info page
      */
     public function render_system_page() {
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You do not have sufficient permissions to access this page.', 'wyoshi-image-optimizer'));
+        }
+        
         $system_info = Utils::get_system_info();
         $capabilities = $this->image_processor->test_capabilities();
-        include ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR . 'includes/admin/views/system-page.php';
+        include WYOSHI_IMG_OPT_PLUGIN_DIR . 'includes/admin/views/system-page.php';
     }
 
     /**
      * Render logs page
      */
     public function render_logs_page() {
+        if (!current_user_can('manage_options')) {
+            wp_die(__('You do not have sufficient permissions to access this page.', 'wyoshi-image-optimizer'));
+        }
+        
         $contexts = Logger::get_available_contexts();
         $current_context = $_GET['context'] ?? 'general';
         $logger = new Logger($current_context);
         $log_contents = $logger->get_log_contents(100); // Last 100 lines
         $log_stats = $logger->get_log_stats();
         
-        include ADVANCED_IMAGE_OPTIMIZER_PLUGIN_DIR . 'includes/admin/views/logs-page.php';
+        include WYOSHI_IMG_OPT_PLUGIN_DIR . 'includes/admin/views/logs-page.php';
     }
 
     /**
      * Render settings section descriptions
      */
     public function render_general_section() {
-        echo '<p>' . __('Configure general optimization settings.', 'advanced-image-optimizer') . '</p>';
+        echo '<p>' . __('Configure general optimization settings.', 'wyoshi-image-optimizer') . '</p>';
     }
 
     public function render_quality_section() {
-        echo '<p>' . __('Adjust quality settings for different image formats.', 'advanced-image-optimizer') . '</p>';
+        echo '<p>' . __('Adjust quality settings for different image formats.', 'wyoshi-image-optimizer') . '</p>';
     }
 
     public function render_advanced_section() {
-        echo '<p>' . __('Advanced configuration options.', 'advanced-image-optimizer') . '</p>';
+        echo '<p>' . __('Advanced configuration options.', 'wyoshi-image-optimizer') . '</p>';
     }
 
     /**
@@ -463,7 +482,7 @@ class AdminManager {
         $description = $args['description'] ?? '';
         
         echo '<label>';
-        echo '<input type="checkbox" name="advanced_image_optimizer_options[' . esc_attr($name) . ']" value="1" ' . checked(1, $value, false) . ' />';
+        echo '<input type="checkbox" name="wyoshi_img_opt_options[' . esc_attr($name) . ']" value="1" ' . checked(1, $value, false) . ' />';
         echo ' ' . esc_html($description);
         echo '</label>';
     }
@@ -480,7 +499,7 @@ class AdminManager {
         $max = $args['max'] ?? 100;
         $description = $args['description'] ?? '';
         
-        echo '<input type="number" name="advanced_image_optimizer_options[' . esc_attr($name) . ']" value="' . esc_attr($value) . '" min="' . esc_attr($min) . '" max="' . esc_attr($max) . '" class="small-text" />';
+        echo '<input type="number" name="wyoshi_img_opt_options[' . esc_attr($name) . ']" value="' . esc_attr($value) . '" min="' . esc_attr($min) . '" max="' . esc_attr($max) . '" class="small-text" />';
         if ($description) {
             echo '<p class="description">' . esc_html($description) . '</p>';
         }
@@ -637,7 +656,7 @@ class AdminManager {
      * @return array Modified bulk actions
      */
     public function add_bulk_actions($actions) {
-        $actions['aio_bulk_optimize'] = __('Optimize Images', 'advanced-image-optimizer');
+        $actions['aio_bulk_optimize'] = __('Optimize Images', 'wyoshi-image-optimizer');
         return $actions;
     }
 
@@ -675,7 +694,7 @@ class AdminManager {
         check_ajax_referer('aio_admin_nonce', 'nonce');
         
         if (!current_user_can('manage_options')) {
-            wp_die(__('Insufficient permissions', 'advanced-image-optimizer'));
+            wp_die(__('Insufficient permissions', 'wyoshi-image-optimizer'));
         }
 
         $attachment_id = intval($_POST['attachment_id']);
@@ -691,7 +710,7 @@ class AdminManager {
         check_ajax_referer('aio_admin_nonce', 'nonce');
         
         if (!current_user_can('manage_options')) {
-            wp_die(__('Insufficient permissions', 'advanced-image-optimizer'));
+            wp_die(__('Insufficient permissions', 'wyoshi-image-optimizer'));
         }
 
         $batch_size = 5; // Process 5 images at a time
@@ -734,6 +753,10 @@ class AdminManager {
     public function ajax_get_stats() {
         check_ajax_referer('aio_admin_nonce', 'nonce');
         
+        if (!current_user_can('manage_options')) {
+            wp_die(__('Insufficient permissions', 'wyoshi-image-optimizer'));
+        }
+        
         $stats = Utils::get_optimization_stats();
         wp_send_json_success($stats);
     }
@@ -745,7 +768,7 @@ class AdminManager {
         check_ajax_referer('aio_admin_nonce', 'nonce');
         
         if (!current_user_can('manage_options')) {
-            wp_die(__('Insufficient permissions', 'advanced-image-optimizer'));
+            wp_die(__('Insufficient permissions', 'wyoshi-image-optimizer'));
         }
 
         $capabilities = $this->image_processor->test_capabilities();
@@ -768,7 +791,7 @@ class AdminManager {
         
         wp_send_json([
             'success' => $success,
-            'message' => $success ? __('Log cleared successfully', 'advanced-image-optimizer') : __('Failed to clear log', 'advanced-image-optimizer')
+            'message' => $success ? __('Log cleared successfully', 'wyoshi-image-optimizer') : __('Failed to clear log', 'wyoshi-image-optimizer')
         ]);
     }
 

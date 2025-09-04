@@ -125,14 +125,14 @@ image-convertor/
 ### フック
 
 **アクション:**
-- `image_convertor_before_optimization`: 最適化前
-- `image_convertor_after_optimization`: 最適化後
-- `image_convertor_cleanup`: クリーンアップ時
+- `wyoshi_img_opt_before_optimization`: 最適化前
+- `wyoshi_img_opt_after_optimization`: 最適化後
+- `wyoshi_img_opt_cleanup`: クリーンアップ時
 
-**フィルター:**
-- `image_convertor_supported_formats`: サポートフォーマット
-- `image_convertor_quality_settings`: 品質設定
-- `image_convertor_delivery_formats`: 配信フォーマット
+**フィルターフック:**
+- `wyoshi_img_opt_supported_formats`: サポートフォーマット
+- `wyoshi_img_opt_quality_settings`: 品質設定
+- `wyoshi_img_opt_delivery_formats`: 配信フォーマット
 
 ### API使用例
 

@@ -4,16 +4,16 @@
  * 
  * Handles WordPress media library integration and automatic image optimization
  * 
- * @package ImageConvertor
+ * @package WyoshiImageOptimizer
  * @subpackage Media
  * @since 1.0.0
  */
 
-namespace ImageConvertor\Media;
+namespace WyoshiImageOptimizer\Media;
 
-use AdvancedImageOptimizer\Processing\ImageProcessor;
-use AdvancedImageOptimizer\Common\Logger;
-use AdvancedImageOptimizer\Common\Utils;
+use WyoshiImageOptimizer\Processing\ImageProcessor;
+use WyoshiImageOptimizer\Common\Logger;
+use WyoshiImageOptimizer\Common\Utils;
 
 class MediaManager {
     
@@ -47,7 +47,7 @@ class MediaManager {
     public function __construct(ImageProcessor $image_processor, Logger $logger) {
         $this->image_processor = $image_processor;
         $this->logger = $logger;
-        $this->options = get_option('image_convertor_options', []);
+        $this->options = get_option('wyoshi_img_opt_options', []);
     }
     
     /**
@@ -193,10 +193,10 @@ class MediaManager {
             'optimized' => true,
             'optimized_at' => current_time('mysql'),
             'original_size' => filesize($file_path),
-            'plugin_version' => IMAGE_CONVERTOR_VERSION
+            'plugin_version' => WYOSHI_IMG_OPT_VERSION
         ];
         
-        update_post_meta($attachment_id, '_image_convertor_data', $optimization_data);
+        update_post_meta($attachment_id, '_wyoshi_img_opt_data', $optimization_data);
         
         return $metadata;
     }
@@ -213,7 +213,7 @@ class MediaManager {
             return $form_fields;
         }
         
-        $optimization_data = get_post_meta($post->ID, '_image_convertor_data', true);
+        $optimization_data = get_post_meta($post->ID, '_wyoshi_img_opt_data', true);
         $file_path = get_attached_file($post->ID);
         
         // Optimization status
@@ -240,7 +240,7 @@ class MediaManager {
         
         $status_html .= '</div>';
         
-        $form_fields['image_convertor_status'] = [
+        $form_fields['wyoshi_img_opt_status'] = [
             'label' => 'Image Convertor',
             'input' => 'html',
             'html' => $status_html
@@ -261,7 +261,7 @@ class MediaManager {
         
         $actions_html .= '</div>';
         
-        $form_fields['image_convertor_actions'] = [
+        $form_fields['wyoshi_img_opt_actions'] = [
             'label' => 'アクション',
             'input' => 'html',
             'html' => $actions_html
@@ -310,7 +310,7 @@ class MediaManager {
      * @return void
      */
     public function render_attachment_meta_box($post) {
-        $optimization_data = get_post_meta($post->ID, '_image_convertor_data', true);
+        $optimization_data = get_post_meta($post->ID, '_wyoshi_img_opt_data', true);
         $file_path = get_attached_file($post->ID);
         $upload_dir = wp_upload_dir();
         $base_dir = dirname($file_path);
@@ -400,7 +400,7 @@ class MediaManager {
             return;
         }
         
-        $optimization_data = get_post_meta($attachment_id, '_image_convertor_data', true);
+        $optimization_data = get_post_meta($attachment_id, '_wyoshi_img_opt_data', true);
         
         if ($optimization_data && isset($optimization_data['optimized'])) {
             echo '<span class="status-optimized">✓ 最適化済み</span>';
@@ -495,7 +495,7 @@ class MediaManager {
      * @return void
      */
     public function ajax_optimize_single_image() {
-        check_ajax_referer('image_convertor_nonce', 'nonce');
+        check_ajax_referer('wyoshi_img_opt_nonce', 'nonce');
         
         if (!current_user_can('upload_files')) {
             wp_die('Insufficient permissions');
@@ -527,7 +527,7 @@ class MediaManager {
      * @return void
      */
     public function ajax_get_optimization_status() {
-        check_ajax_referer('image_convertor_nonce', 'nonce');
+        check_ajax_referer('wyoshi_img_opt_nonce', 'nonce');
         
         if (!current_user_can('upload_files')) {
             wp_die('Insufficient permissions');
@@ -535,7 +535,7 @@ class MediaManager {
         
         $attachment_id = intval($_POST['attachment_id']);
         
-        $optimization_data = get_post_meta($attachment_id, '_image_convertor_data', true);
+        $optimization_data = get_post_meta($attachment_id, '_wyoshi_img_opt_data', true);
         $file_path = get_attached_file($attachment_id);
         
         $status = [
@@ -558,7 +558,7 @@ class MediaManager {
      * @return void
      */
     public function ajax_restore_original_image() {
-        check_ajax_referer('image_convertor_nonce', 'nonce');
+        check_ajax_referer('wyoshi_img_opt_nonce', 'nonce');
         
         if (!current_user_can('upload_files')) {
             wp_die('Insufficient permissions');
@@ -655,10 +655,10 @@ class MediaManager {
                 'optimized_size' => $result['optimized_size'],
                 'savings_bytes' => $result['savings_bytes'],
                 'savings_percent' => $result['savings_percent'],
-                'plugin_version' => IMAGE_CONVERTOR_VERSION
+                'plugin_version' => WYOSHI_IMG_OPT_VERSION
             ];
             
-            update_post_meta($attachment_id, '_image_convertor_data', $optimization_data);
+            update_post_meta($attachment_id, '_wyoshi_img_opt_data', $optimization_data);
             
             $this->logger->info('Single image optimized', [
                 'attachment_id' => $attachment_id,
@@ -690,7 +690,7 @@ class MediaManager {
         }
         
         // Remove optimization metadata
-        delete_post_meta($attachment_id, '_image_convertor_data');
+        delete_post_meta($attachment_id, '_wyoshi_img_opt_data');
         
         // Delete generated files
         $base_dir = dirname($file_path);
